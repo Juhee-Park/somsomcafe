@@ -15,24 +15,28 @@ function scene:create( event )
 	-- INSERT code here to initialize the scene
 	-- e.g. add display objects to 'sceneGroup', add touch listeners, etc.
 	
-
-	-- 배경이미지 삽입
-	local background = display.newImageRect("main_background.png", display.contentWidth, display.contentHeight)
- 	background.x, background.y = display.contentWidth/2, display.contentHeight/2
-
-	-- 팝업 이미지 삽입 
-	local popup = display.newImage("popup.png")
- 	popup.x, popup.y = 735, 2000
-
-	-- 팝업 버튼 이미지 삽입
-	local popup_button = display.newImage("popup_button.png")
- 	popup_button.x, popup_button.y = 1176, 2242
+	-- create a white background to fill screen
+	local background = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
+	background:setFillColor( 1 )	-- white
+	
+	-- create some text
+	local title = display.newText( "First View", display.contentCenterX, 125, native.systemFont, 32 )
+	title:setFillColor( 0 )	-- black
+	
+	local newTextParams = { text = "Loaded by the first tab's\n\"onPress\" listener\nspecified in the 'tabButtons' table", 
+						x = display.contentCenterX + 10, 
+						y = title.y + 215, 
+						width = 310, height = 310, 
+						font = native.systemFont, fontSize = 14, 
+						align = "center" }
+	local summary = display.newText( newTextParams )
+	summary:setFillColor( 0 ) -- black
 
 	
-	
+	-- all objects must be added to group (e.g. self.view)
 	sceneGroup:insert( background )
-	-- sceneGroup:insert( title )
-	-- sceneGroup:insert( summary )
+	sceneGroup:insert( title )
+	sceneGroup:insert( summary )
 end
 
 function scene:show( event )
