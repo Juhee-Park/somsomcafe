@@ -21,16 +21,16 @@ function scene:create( event )
 	-- 게임 시작 시 팝업 출력 (작업자 : 박주희)        완료
 
 	-- 배경이미지 삽입
-	local background = display.newImageRect("main_img.png", display.contentWidth, display.contentHeight)
+	local background = display.newImageRect("img/main_background.png", display.contentWidth, display.contentHeight)
  	background.x, background.y = display.contentWidth/2, display.contentHeight/2
 
 
 	-- 팝업 이미지 삽입 
-	local popup = display.newImage("popup.png")
+	local popup = display.newImage("img/main_popup/popup.png")
  	popup.x, popup.y = 735, 2000
 
 	-- 팝업 버튼 이미지 삽입
-	local popup_button = display.newImage("popup_button.png")
+	local popup_button = display.newImage("img/main_popup/popup_button.png")
  	popup_button.x, popup_button.y = 1176, 2242
 
 	-- 팝업 닫기 이벤트
