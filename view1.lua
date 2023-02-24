@@ -33,8 +33,6 @@ function scene:create( event )
  	end
 
  	door:addEventListener("tap",tapEventListener)
-
-
 end
 
 function scene:show( event )
