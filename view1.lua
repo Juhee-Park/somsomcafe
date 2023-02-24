@@ -10,33 +10,29 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 	
-	-- Called when the scene's view does not exist.
-	-- 
-	-- INSERT code here to initialize the scene
-	-- e.g. add display objects to 'sceneGroup', add touch listeners, etc.
-	
-	-- create a white background to fill screen
-	local background = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
-	background:setFillColor( 1 )	-- white
-	
-	-- create some text
-	local title = display.newText( "First View", display.contentCenterX, 125, native.systemFont, 32 )
-	title:setFillColor( 0 )	-- black
-	
-	local newTextParams = { text = "Loaded by the first tab's\n\"onPress\" listener\nspecified in the 'tabButtons' table", 
-						x = display.contentCenterX + 10, 
-						y = title.y + 215, 
-						width = 310, height = 310, 
-						font = native.systemFont, fontSize = 14, 
-						align = "center" }
-	local summary = display.newText( newTextParams )
-	summary:setFillColor( 0 ) -- black
+	-- 배경이미지 추가(솜1,2,3가 다 그려져있는 배경이라 수정이 필요할 것 같아요)
+	local background = display.newImageRect("img/main_background.png", display.contentWidth, display.contentHeight)
+	background.x, background.y = display.contentWidth/2, display.contentHeight/2
 
-	
-	-- all objects must be added to group (e.g. self.view)
-	sceneGroup:insert( background )
-	sceneGroup:insert( title )
-	sceneGroup:insert( summary )
+	-- 문 클릭위해 이미지 추가: main_background와 맞추기 위해서 처음에 올려주신 door이미지보다 사이즈가 작은 이미지를 사용했으니 한번 확인해주세요
+	local door = display.newImage("img/door.png"
+ 	-- door.x, door.y = display.contentWidth*0.0358, display.contentHeight*0.84
+ 	door.x = door.x + 52
+ 	door.y = door.y + 2155
+
+ 	-- 문을 클릭하면 손님 2명의 이미지가 화면에 나타남
+ 	local function tapEventListener( event )
+
+ 		local somGroup = display.newGroup()
+ 		local som = {}
+
+ 		for i =1,2 do
+ 			som[i] = display.newImageRect(somGroup, "img/customer.png", 312, 480)
+ 			som[i].x , som[i].y= display.contentWidth*0.25 + 400*(i-1), display.contentHeight*0.82
+ 		end
+ 	end
+
+ 	door:addEventListener("tap",tapEventListener)
 end
 
 function scene:show( event )
