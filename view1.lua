@@ -10,29 +10,7 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 	
-	-- Called when the scene's view does not exist.
-	-- 
-	-- INSERT code here to initialize the scene
-	-- e.g. add display objects to 'sceneGroup', add touch listeners, etc.
-	
 
-	-- 배경이미지 삽입
-	local background = display.newImageRect("main_background.png", display.contentWidth, display.contentHeight)
- 	background.x, background.y = display.contentWidth/2, display.contentHeight/2
-
-	-- 팝업 이미지 삽입 
-	local popup = display.newImage("popup.png")
- 	popup.x, popup.y = 735, 2000
-
-	-- 팝업 버튼 이미지 삽입
-	local popup_button = display.newImage("popup_button.png")
- 	popup_button.x, popup_button.y = 1176, 2242
-
-	
-	
-	sceneGroup:insert( background )
-	-- sceneGroup:insert( title )
-	-- sceneGroup:insert( summary )
 end
 
 function scene:show( event )
