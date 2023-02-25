@@ -26,7 +26,7 @@ function scene:create( event )
 	-- 시작 버튼 이벤트
 	local function start_button_event( event )  
  		if( event.phase == "began" ) then  
- 			composer.gotoScene( "game1" )
+ 			composer.gotoScene( "game" )
  		end  
  	end
 	 
