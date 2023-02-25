@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------------
 --
--- view1.lua
+-- clear.lua
 --
 -----------------------------------------------------------------------------------------
 
@@ -10,33 +10,30 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 	
+    --클리어 화면 출력
+	local background = display.newImage("img/clear_background.png", display.contentCenterX, display.contentCenterY)
+ 
+    --다시하기 
+	local retry = display.newImage("img/clear/retry.png", display.contentCenterX, display.contentCenterY)
+	retry.x = 751
+	retry.y = 1723
 	
-	--------------------------------------------------------------------------------------------------------------------
-	-- 게임 시작 페이지 (작업자 : 박주희) 
+	sceneGroup:insert(background)
+	sceneGroup:insert(retry)
+	sceneGroup:insert(out)
 
+	
+	local function retry_button(event)
+		print("시작화면으로")
+		composer.gotoScene('game3')
+	end
+ 	retry:addEventListener("tap", retry_button) -- 다시하기 누르면 게임화면으로
 
-	-- 배경이미지 삽입
-	local background = display.newImageRect("img/start_background.png", display.contentWidth, display.contentHeight)
- 	background.x, background.y = display.contentWidth/2, display.contentHeight/2
-
-	-- 시작 버튼 이미지 삽입
-	local start_button = display.newImage("img/start/start.png")
- 	start_button.x, start_button.y = 744, 1881
-
-	-- 시작 버튼 이벤트
-	local function start_button_event( event )  
- 		if( event.phase == "began" ) then  
- 			composer.gotoScene( "game" )
- 		end  
+ 	local function out_button(event)
+		native.requestExit()
  	end
-	 
-	-- 팝업 닫기 이벤트 적용
-	start_button:addEventListener("touch", start_button_event)
-	 --------------------------------------------------------------------------------------------------------------------
-
-	  sceneGroup:insert(background)
-	  sceneGroup:insert(start_button)
-
+ 	out:addEventListener("tap", out_button)
+	
 end
 
 function scene:show( event )
@@ -62,7 +59,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
-		composer.removeScene('start')
+		composer.removeScene('clear')
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
 	end

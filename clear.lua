@@ -12,10 +12,7 @@ function scene:create( event )
 	
     --클리어 화면 출력
 	local background = display.newImage("img/clear_background.png", display.contentCenterX, display.contentCenterY)
-    --게임종료
-	local out = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-	out.x = 751
-	out.y = 2070
+ 
     --다시하기 
 	local retry = display.newImage("img/clear/retry.png", display.contentCenterX, display.contentCenterY)
 	retry.x = 751
@@ -28,7 +25,7 @@ function scene:create( event )
 	
 	local function retry_button(event)
 		print("시작화면으로")
-		composer.gotoScene('start')
+		composer.gotoScene('game2')
 	end
  	retry:addEventListener("tap", retry_button) -- 다시하기 누르면 게임화면으로
 
