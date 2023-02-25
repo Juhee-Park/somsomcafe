@@ -20,7 +20,8 @@ function scene:create( event )
 
 	-- 재시작 버튼 이미지 삽입
 	local restart_button = display.newImage("img/clear/retry.png")
- 	restart_button.x, restart_button.y = 719, 1976
+ 	restart_button.x, restart_button.y = 751, 1723
+ 	
 	-- 시작 버튼 이벤트
 	local function restart_button_event( event )  
  		if( event.phase == "began" ) then  

@@ -14,16 +14,14 @@ function scene:create( event )
 	local background = display.newImage("img/clear_background.png", display.contentCenterX, display.contentCenterY)
     --게임종료
 	local out = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-	out.y = out.y + 980
+	out.x = 751
+	out.y = 2070
     --다시하기 
 	local retry = display.newImage("img/clear/retry.png", display.contentCenterX, display.contentCenterY)
-	retry.y = retry.y + 700
-    --클리어
-	local clear = display.newImage("img/clear/clear.png", display.contentCenterX, display.contentCenterY)
-	clear.y = clear.y - 880	
+	retry.x = 751
+	retry.y = 1723
 	
 	sceneGroup:insert(background)
-	sceneGroup:insert(clear)
 	sceneGroup:insert(retry)
 	sceneGroup:insert(out)
 

@@ -22,9 +22,6 @@ function scene:create( event )
 	--local retry = display.newImage("img/clear/retry.png", display.contentCenterX, display.contentCenterY)
 	retry.x = 400
 	retry.y = 2300
-    --클리어
-	local clear = display.newImage("img/clear/clear.png", display.contentCenterX, display.contentCenterY)
-	clear.y = clear.y - 880	
 	--평균 소요 시간
 	local avgTimeText = display.newText("평균 소요 시간 : ", display.contentCenterX, display.contentCenterY)
 	avgTimeText.size = 100
@@ -60,7 +57,6 @@ function scene:create( event )
 	local schoolImg
 
 	sceneGroup:insert(background)
-	sceneGroup:insert(clear)
 	sceneGroup:insert(retry)
 	sceneGroup:insert(out)
 	sceneGroup:insert(avgTimeText)
