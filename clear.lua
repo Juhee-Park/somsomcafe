@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------------
 --
--- view1.lua
+-- clear.lua
 --
 -----------------------------------------------------------------------------------------
 
@@ -10,33 +10,35 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 	
-	-- Called when the scene's view does not exist.
-	-- 
-	-- INSERT code here to initialize the scene
-	-- e.g. add display objects to 'sceneGroup', add touch listeners, etc.
+    --클리어 화면 출력
+	local background = display.newImage("img/clear_background.png", display.contentCenterX, display.contentCenterY)
+    --게임종료
+	local out = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
+	out.y = out.y + 980
+    --다시하기 
+	local retry = display.newImage("img/clear/retry.png", display.contentCenterX, display.contentCenterY)
+	retry.y = retry.y + 700
+    --클리어
+	local clear = display.newImage("img/clear/clear.png", display.contentCenterX, display.contentCenterY)
+	clear.y = clear.y - 880	
 	
-	-- create a white background to fill screen
-	local background = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
-	background:setFillColor( 1 )	-- white
-	
-	-- create some text
-	local title = display.newText( "First View", display.contentCenterX, 125, native.systemFont, 32 )
-	title:setFillColor( 0 )	-- black
-	
-	local newTextParams = { text = "Loaded by the first tab's\n\"onPress\" listener\nspecified in the 'tabButtons' table", 
-						x = display.contentCenterX + 10, 
-						y = title.y + 215, 
-						width = 310, height = 310, 
-						font = native.systemFont, fontSize = 14, 
-						align = "center" }
-	local summary = display.newText( newTextParams )
-	summary:setFillColor( 0 ) -- black
+	sceneGroup:insert(background)
+	sceneGroup:insert(clear)
+	sceneGroup:insert(retry)
+	sceneGroup:insert(out)
 
 	
-	-- all objects must be added to group (e.g. self.view)
-	sceneGroup:insert( background )
-	sceneGroup:insert( title )
-	sceneGroup:insert( summary )
+	local function retry_button(event)
+		print("시작화면으로")
+		composer.gotoScene('start')
+	end
+ 	retry:addEventListener("tap", retry_button) -- 다시하기 누르면 게임화면으로
+
+ 	local function out_button(event)
+		native.requestExit()
+ 	end
+ 	out:addEventListener("tap", out_button)
+	
 end
 
 function scene:show( event )
@@ -62,6 +64,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
+		composer.removeScene('clear')
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
 	end

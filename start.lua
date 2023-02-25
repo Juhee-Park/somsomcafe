@@ -12,24 +12,25 @@ function scene:create( event )
 	
 	
 	--------------------------------------------------------------------------------------------------------------------
-	-- °ÔÀÓ ½ÃÀÛ ÆäÀÌÁö (ÀÛ¾÷ÀÚ : ¹ÚÁÖÈñ) 
+	-- ê²Œì„ ì‹œì‘ í˜ì´ì§€ (ì‘ì—…ì : ë°•ì£¼í¬) 
 
-	-- ¹è°æÀÌ¹ÌÁö »ğÀÔ
+
+	-- ë°°ê²½ì´ë¯¸ì§€ ì‚½ì…
 	local background = display.newImageRect("img/start_background.png", display.contentWidth, display.contentHeight)
  	background.x, background.y = display.contentWidth/2, display.contentHeight/2
 
-	-- ½ÃÀÛ ¹öÆ° ÀÌ¹ÌÁö »ğÀÔ
+	-- ì‹œì‘ ë²„íŠ¼ ì´ë¯¸ì§€ ì‚½ì…
 	local start_button = display.newImage("img/start/start.png")
  	start_button.x, start_button.y = 700, 2260
 
-	-- ½ÃÀÛ ¹öÆ° ÀÌº¥Æ®
+	-- ì‹œì‘ ë²„íŠ¼ ì´ë²¤íŠ¸
 	local function start_button_event( event )  
  		if( event.phase == "began" ) then  
- 			composer.gotoScene( "game_juhee" )
+ 			composer.gotoScene( "game" )
  		end  
  	end
 	 
-	-- ÆË¾÷ ´İ±â ÀÌº¥Æ® Àû¿ë
+	-- íŒì—… ë‹«ê¸° ì´ë²¤íŠ¸ ì ìš©
 	start_button:addEventListener("touch", start_button_event)
 	 --------------------------------------------------------------------------------------------------------------------
 
@@ -61,6 +62,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
+		composer.removeScene('start')
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
 	end

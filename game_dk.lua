@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------------
 --
--- view1.lua
+-- game_dk.lua
 --
 -----------------------------------------------------------------------------------------
 
@@ -9,6 +9,7 @@ local scene = composer.newScene()
 
 function scene:create( event )
 	local sceneGroup = self.view
+
 	------ 변수 설정 ------
 	-- 배경
 	local background = display.newImage("img/main_background.png",display.contentCenterX, display.contentCenterY)
@@ -123,11 +124,6 @@ function scene:create( event )
 	smoothie_b.x = smoothie_b.x + 200
 	smoothie_b:toBack()
 	smoothie_b.alpha = 0
-	--딸기바나나 스무디 (추후 알맞은 이미지로 대체)
-	local smoothie_sb = display.newImage("img/main/drink/smoothie_img.png", display.contentCenterX, display.contentCenterY)
-	smoothie_sb.x = smoothie_sb.x + 200
-	smoothie_sb:toBack()
-	smoothie_sb.alpha = 0
 	-- 재료 팝업 위한 변수 (selected[i]로 담겨진거 구분)
 	------- 물: 1 / 우유: 2 / 시럽: 3
 	------- 에스프레소: 4 / 얼음: 5
@@ -139,39 +135,36 @@ function scene:create( event )
 	--설정된 음료 구분
 	------- 아메리카노: 1 / 바닐라라떼: 2 / 카페모카: 3
 	------- 딸기스무디: 4 / 바나나스무디: 5 / 블루베리스무디: 6
-	------- 딸기바나나스무디: 7 
 	local drinkMade = 0
 	--숫자 세는 변수
 	local cntNum
 	-- 문 오픈 여부
 	local doorOpen = 0
-	--팝업 닫았는지 여부
-	local popupClose = 0
-	--레시피 닫았는지 여부
-	local recipeClose = 1
-	--특별한 손님 등장
-	local speialCustomer = 0
-	------------------------------------
+
 	-- 문
 	local door = display.newImage("img/main/button/door.png")
  	door.x = door.x + 52
  	door.y = door.y + 2155
- 	------------------------------------
+ 	
  	-- 손님
  	local customer = {} 					-- 손님 배열로 화면의 왼쪽부터 차례대로 1, 2, 3번. 
 	local customerGroup = display.newGroup()
+
 	local success = 0						-- 게임 성공 횟수.
 	local fail = 0							-- 게임 실패 횟수.
+
 	local pickMenu = 0
 	local drinkImage = {"coffee_img", "coffee_img", "coffee_img", "smoothie_img", "smoothie_img", "smoothie_img"}	-- 음료 이미지 주소. 나중에 모든 음료 이미지가 완성되면 수정 및 추가가 필요합니다. (랜덤 함수를 활용하기 위한 변수입니다.)
 	local customerImage = {"customer"}					-- 손님 이미지 주소. 나중에 모든 손님 이미지가 완성되면 수정 및 추가가 필요합니다. (랜덤 함수를 활용하기 위한 변수입니다.)
+
 	local timeBar = nil						-- 음료 위에 표시되는 시간 제한 바.
 	local count = 0							-- 시간 제한 카운트 변수.
+
 	local menu = nil						-- 손님 위에 표시되는 음료 이미지.
 	local dialog = nil						-- 손님이 음료를 요구하는 대화창 이미지.
 	local bar = nil							-- 진행상황 이미지.
 	local timeAttack
- 	------------------------------------
+
 	--제조성공시 점수
 	local score_s = display.newText(0, 660, 660, display.contentWidth*0.1, display.contentHeight*0.15) --성공시 점수
 	score_s.size = 100
@@ -190,84 +183,8 @@ function scene:create( event )
 	local order_fail = display.newImage("img/main/fail_count.png", display.contentCenterX, display.contentCenterY)
 	order_fail.x = order_fail.x + 327
 	order_fail.y = order_fail.y - 763
- 	------------------------------------
- 	local group = display.newGroup()
-	local tableGroup = display.newGroup()
-	-- 팝업 이미지1 삽입 (배경 설명)
-	local popup = display.newImage(group, "img/main_popup/popup.png")
- 	popup.x, popup.y = 735, 2000
-	popup.alpha = 1
-	-- 팝업 이미지2 삽입 (게임방법 설명)
-	local popup2 = display.newImage(group, "img/main_popup/popup2.png")
- 	popup2.x, popup2.y = 735, 2000
-	popup2.alpha = 0
-	-- 팝업 버튼 이미지 삽입
-	local popup_button = display.newImage(group, "img/main_popup/popup_button.png")
- 	popup_button.x, popup_button.y = 1176, 2242
-	popup_button.alpha = 1
- 	------------------------------------
-	-- 레시피 북 이미지 삽입
- 	local recipe = display.newImage(group, 'img/main/button/recipe_book.png')
-	recipe.x, recipe.y = display.contentWidth*0.18, display.contentHeight * 0.55
-	recipe.alpha = 1
-	-- 레시피 팝업 이미지 삽입 
-	tableGroup.alpha = 0
-	local recipe_popup 
-	recipe_popup = display.newImageRect(tableGroup, "img/recipe_background.png", display.contentWidth, display.contentHeight)
-	recipe_popup.x, recipe_popup.y = display.contentWidth/2, display.contentHeight/2
-	--레시피 닫기 이미지 삽입
-	local recipe_x
-	recipe_x = display.newImage(tableGroup, "img/recipe/recipe_out.png")
-	recipe_x.x, recipe_x.y = display.contentWidth *0.87, display.contentHeight*0.08
-	--재료 이미지 삽입
-	local in_table = {}
-	local line = {}
-	local drink = {}
-	local ingredient = {}
-	-- americano
- 	in_table[1] = display.newImage(tableGroup, "img/recipe/ingredient_table.png", display.contentWidth*0.62, display.contentHeight*0.199)
- 	line[1] = display.newImage(tableGroup, "img/recipe/line.png", display.contentWidth*0.49, display.contentHeight*0.255)
- 	drink[1] = display.newImage(tableGroup, "img/recipe/americano.png", display.contentWidth*0.18, display.contentHeight*0.199)
-	ingredient[1] = display.newImage(tableGroup, "img/recipe/espresso.png", display.contentWidth*0.5, display.contentHeight*0.199)
-	ingredient[2] = display.newImage(tableGroup, "img/recipe/water.png", display.contentWidth*0.75, display.contentHeight*0.199)
-	-- vanilla_latte
-	in_table[2] = display.newImage(tableGroup, "img/recipe/ingredient_table.png", display.contentWidth*0.62, display.contentHeight*0.33)
- 	line[2] = display.newImage(tableGroup, "img/recipe/line.png", display.contentWidth*0.49, display.contentHeight*0.385)
- 	drink[2] = display.newImage(tableGroup, "img/recipe/vanilla_latte.png", display.contentWidth*0.18, display.contentHeight*0.33)
-	ingredient[3] = display.newImage(tableGroup, "img/recipe/espresso.png", display.contentWidth*0.45, display.contentHeight*0.33)
-	ingredient[4] = display.newImage(tableGroup, "img/recipe/milk.png", display.contentWidth*0.63, display.contentHeight*0.33)
-	ingredient[5] = display.newImage(tableGroup, "img/recipe/syrup.png", display.contentWidth*0.8, display.contentHeight*0.33)
-	-- cafe_moca
-	in_table[3] = display.newImage(tableGroup, "img/recipe/ingredient_table.png", display.contentWidth*0.62, display.contentHeight*0.46)
- 	line[3] = display.newImage(tableGroup, "img/recipe/line.png", display.contentWidth*0.49, display.contentHeight*0.51)
- 	drink[3] = display.newImage(tableGroup, "img/recipe/vanilla_latte.png", display.contentWidth*0.18, display.contentHeight*0.46)
-	ingredient[6] = display.newImage(tableGroup, "img/recipe/espresso.png", display.contentWidth*0.45, display.contentHeight*0.46)
-	ingredient[7] = display.newImage(tableGroup, "img/recipe/milk.png", display.contentWidth*0.63, display.contentHeight*0.46)
-	ingredient[8] = display.newImage(tableGroup, "img/recipe/choco.png", display.contentWidth*0.8, display.contentHeight*0.46)
-	-- blueberry_smoothie
-	in_table[4] = display.newImage(tableGroup, "img/recipe/ingredient_table.png", display.contentWidth*0.62, display.contentHeight*0.59)
- 	line[4] = display.newImage(tableGroup, "img/recipe/line.png", display.contentWidth*0.49, display.contentHeight*0.64)
- 	drink[4] = display.newImage(tableGroup, "img/recipe/blueberry_smoothie.png", display.contentWidth*0.16, display.contentHeight*0.59)
-	ingredient[9] = display.newImage(tableGroup, "img/recipe/ice.png", display.contentWidth*0.45, display.contentHeight*0.59)
-	ingredient[10] = display.newImage(tableGroup, "img/recipe/blueberry.png", display.contentWidth*0.63, display.contentHeight*0.59)
-	ingredient[11] = display.newImage(tableGroup, "img/recipe/syrup.png", display.contentWidth*0.8, display.contentHeight*0.59)
-	-- strawberry_smoothie
-	in_table[5] = display.newImage(tableGroup, "img/recipe/ingredient_table.png", display.contentWidth*0.62, display.contentHeight*0.715)
- 	line[5] = display.newImage(tableGroup, "img/recipe/line.png", display.contentWidth*0.49, display.contentHeight*0.77)
- 	drink[5] = display.newImage(tableGroup, "img/recipe/strawberry_smoothie.png", display.contentWidth*0.16, display.contentHeight*0.715)
-	ingredient[12] = display.newImage(tableGroup, "img/recipe/ice.png", display.contentWidth*0.45, display.contentHeight*0.715)
-	ingredient[13] = display.newImage(tableGroup, "img/recipe/strawberry.png", display.contentWidth*0.63, display.contentHeight*0.715)
-	ingredient[14] = display.newImage(tableGroup, "img/recipe/syrup.png", display.contentWidth*0.8, display.contentHeight*0.715)
-	-- banna_smoothie
-	in_table[6] = display.newImage(tableGroup, "img/recipe/ingredient_table.png", display.contentWidth*0.62, display.contentHeight*0.84)
- 	line[6] = display.newImage(tableGroup, "img/recipe/line.png", display.contentWidth*0.49, display.contentHeight*0.895)
- 	drink[6] = display.newImage(tableGroup, "img/recipe/banana_smoothie.png", display.contentWidth*0.16, display.contentHeight*0.84)
-	ingredient[15] = display.newImage(tableGroup, "img/recipe/ice.png", display.contentWidth*0.45, display.contentHeight*0.84)
-	ingredient[16] = display.newImage(tableGroup, "img/recipe/banana.png", display.contentWidth*0.63, display.contentHeight*0.84)
-	ingredient[17] = display.newImage(tableGroup, "img/recipe/syrup.png", display.contentWidth*0.8, display.contentHeight*0.84)
 
 -----------------------------------------------------------
-
 	sceneGroup:insert(water)
 	sceneGroup:insert(milk)
 	sceneGroup:insert(syrup)
@@ -300,65 +217,8 @@ function scene:create( event )
 	sceneGroup:insert(score_s)
 	sceneGroup:insert(score_f)
 	sceneGroup:insert(door)
-	sceneGroup:insert(group)
-	sceneGroup:insert(tableGroup)
+
 -----------------------------------------------------------
-
-----------------------팝업 닫기-----------------------------
-	-- 팝업 닫기 이벤트
-	local function popupOff( event )  
- 		if( event.phase == "began") then 
-			if(popup.alpha == 1) then
- 				popup.alpha = 0
-				popup2.alpha = 1
-			else
-				popup2.alpha = 0
-				popup_button.alpha = 0
-				--팝업 내려야 문 열림 확인 변수
-				popupClose = 1
-			end
- 		end  
- 	end
-	 
-	-- 팝업 닫기 이벤트 적용
-	popup_button:addEventListener("touch", popupOff)
-
-----------------------레시피북 열기/닫기---------------------
-	--레시피 북 클릭 구현
-	function recipe:tap( event )
-		--레시피 엶
-		recipeClose = 0
-		--타임바 안보이게
-		if timeBar ~= nil then
-			timeBar.alpha = 0
-		end
-		tableGroup.alpha = 1
-		-- 맨 앞에 출력 되게
-		tableGroup:toFront()
-		--레시피 닫기 이벤트
-		local function recipe_off( event )  
- 			if( event.phase == "began" ) then  
-				--레시피 닫음
-				recipeClose = 1
-				--타임바 보이게
-				if timeBar ~= nil then
-					timeBar.alpha = 1
-				end
-				--닫을 때 손님 다시 보이게
-				customerGroup.alpha = 1
-				--닫을 때 음료 다시 보이게
-				if menu ~= nil then
-					menu.alpha = 1
-				end
-				tableGroup.alpha = 0
-	 		end  
-		end
-	 
-		-- 레시피 닫기 이벤트 적용
-		recipe_x:addEventListener("touch", recipe_off)
-	end
-
-	recipe:addEventListener("tap", recipe)
 
 
 ----------------------10초 타이머---------------------------
@@ -373,7 +233,7 @@ function scene:create( event )
 			timeBar.width, timeBar.x = 353 - 35.3 * count, display.contentWidth*0.59 - 17.16 * (count-1)
 		end
 
-		timeBar:setFillColor(1, 0, 0, 1)		-- 바의 색깔은 빨강색으로 했습니다. 
+		timeBar:setFillColor(1, 0, 0)		-- 바의 색깔은 빨강색으로 했습니다. 
 
 		print("count: " .. count)
 		if count == 10 then
@@ -423,12 +283,7 @@ function scene:create( event )
 
 		sceneGroup:insert(menu)
 
-		--레시피 열었을 때 안보이게 생성
-		if recipeClose ~= 1 then
-			menu.alpha = 0
-		end
-
-		if success < 2 and fail < 5 then											-- 성공 횟수와 실패 횟수가 각각 20번, 5번 미만이라면 타이머를 시작합니다. (게임 종료 시 타이머 기능을 사용하지 않기 위해서 조건문 사용.)
+		if success < 20 and fail < 5 then											-- 성공 횟수와 실패 횟수가 각각 20번, 5번 미만이라면 타이머를 시작합니다. (게임 종료 시 타이머 기능을 사용하지 않기 위해서 조건문 사용.)
 			timeAttack = timer.performWithDelay(1000, counter, 10)			-- 10초 카운트 시작 
 		end
 	end
@@ -455,22 +310,12 @@ function scene:create( event )
 		customer[1].x, customer[1].y = display.contentWidth*0.52, display.contentHeight*0.83
 		customer[2] = customer[1]
 
-		-- 특별한 손님 유뮤
-		if success == 18 and speialCustomer == 0 then
-			speialCustomer = 1
-			customer[1] = display.newImage(customerGroup, "img/main/character/"..customerImage[pickCustomer]..".png")
-		else	
-			pickCustomer = math.random(1)		-- 나중에 손님 이미지가 추가되면 수정이 필요합니다. (손님 이미지 개수로 수정해야 함.)
-			customer[1] = display.newImage(customerGroup, "img/main/character/"..customerImage[pickCustomer]..".png")
-		end
+		pickCustomer = math.random(1)		-- 나중에 손님 이미지가 추가되면 수정이 필요합니다. (손님 이미지 개수로 수정해야 함.)
+		customer[1] = display.newImage(customerGroup, "img/main/character/"..customerImage[pickCustomer]..".png")
 		customer[1].x, customer[1].y = display.contentWidth*0.26, display.contentHeight*0.83
 
 		sceneGroup:insert(customerGroup)
 
-		--레시피 열었을 때 안보이게 생성
-		if recipeClose ~= 1 then
-			customerGroup.alpha = 0
-		end
 		orderMenu()
 	end
 
@@ -479,23 +324,21 @@ function scene:create( event )
 
  	--- 문을 클릭하면 손님 2명의 이미지가 화면에 나타남
  	local function tapEventListener( event )
- 		--문 이미 열었는지 여부
- 		if doorOpen == 0 then
-	 		if popupClose == 1 then
-		 		doorOpen = 1
 
-		 		for i =1,2 do
-		 			customer[i] = display.newImageRect(customerGroup, "img/main/character/customer.png", 312, 480)
-		 			customer[i].x , customer[i].y= display.contentWidth*0.25 + 400*(i-1), display.contentHeight*0.82
-		 		end
+ 		doorOpen = 1
+ 		--local somGroup = display.newGroup()
+ 		--local som = {}
+
+ 		for i =1,2 do
+ 			customer[i] = display.newImageRect(customerGroup, "img/main/character/customer.png", 312, 480)
+ 			customer[i].x , customer[i].y= display.contentWidth*0.25 + 400*(i-1), display.contentHeight*0.82
+ 		end
 
 
-				-- 메뉴를 받기 전 손님 2명을 먼저 받아야 합니다. (손님 이미지 2개 화면에 추가)
-				orderMenu()				-- 처음 손님이 들어온 후 메뉴를 주문합니다. 
+		-- 메뉴를 받기 전 손님 2명을 먼저 받아야 합니다. (손님 이미지 2개 화면에 추가)
+		orderMenu()				-- 처음 손님이 들어온 후 메뉴를 주문합니다. 
 
-				sceneGroup:insert(customerGroup)
-			end
-		end
+		sceneGroup:insert(customerGroup)
  	end
 
  	door:addEventListener("tap",tapEventListener)
@@ -505,29 +348,27 @@ function scene:create( event )
 --------------재료 선택 및 취소---------------------------
 	-- 물 선택 버튼
 	local function water_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 1 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 1 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 1
-						water:toFront()
-						if i == 1 then
-							water.x = 200
-						elseif i == 2 then
-							water.x = 440
-						elseif i == 3 then
-							water.x = 680
-						elseif i == 4 then
-							water.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 1
+					water:toFront()
+					if i == 1 then
+						water.x = 200
+					elseif i == 2 then
+						water.x = 440
+					elseif i == 3 then
+						water.x = 680
+					elseif i == 4 then
+						water.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -536,13 +377,11 @@ function scene:create( event )
 	
 	-- 물 선택 취소
 	local function water_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 1 then
-					selected[i] = 0
-					water:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 1 then
+				selected[i] = 0
+				water:toBack()
+				break
 			end
 		end
 	end
@@ -551,29 +390,27 @@ function scene:create( event )
 
 	-- 우유 선택 버튼
 	local function milk_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 2 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 2 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 2
-						milk:toFront()
-						if i == 1 then
-							milk.x = 200
-						elseif i == 2 then
-							milk.x = 440
-						elseif i == 3 then
-							milk.x = 680
-						elseif i == 4 then
-							milk.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 2
+					milk:toFront()
+					if i == 1 then
+						milk.x = 200
+					elseif i == 2 then
+						milk.x = 440
+					elseif i == 3 then
+						milk.x = 680
+					elseif i == 4 then
+						milk.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -582,13 +419,11 @@ function scene:create( event )
 	
 	-- 우유 선택 취소
 	local function milk_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 2 then
-					selected[i] = 0
-					milk:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 2 then
+				selected[i] = 0
+				milk:toBack()
+				break
 			end
 		end
 	end
@@ -597,29 +432,27 @@ function scene:create( event )
 
 	-- 시럽 선택 버튼
 	local function syrup_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 3 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 3 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 3
-						syrup:toFront()
-						if i == 1 then
-							syrup.x = 200
-						elseif i == 2 then
-							syrup.x = 440
-						elseif i == 3 then
-							syrup.x = 680
-						elseif i == 4 then
-							syrup.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 3
+					syrup:toFront()
+					if i == 1 then
+						syrup.x = 200
+					elseif i == 2 then
+						syrup.x = 440
+					elseif i == 3 then
+						syrup.x = 680
+					elseif i == 4 then
+						syrup.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -628,13 +461,11 @@ function scene:create( event )
 	
 	-- 시럽 선택 취소
 	local function syrup_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 3 then
-					selected[i] = 0
-					syrup:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 3 then
+				selected[i] = 0
+				syrup:toBack()
+				break
 			end
 		end
 	end
@@ -643,29 +474,27 @@ function scene:create( event )
 	
 	-- 에스프레소 선택 버튼
 	local function espresso_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 4 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 4 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 4
-						espresso:toFront()
-						if i == 1 then
-							espresso.x = 200
-						elseif i == 2 then
-							espresso.x = 440
-						elseif i == 3 then
-							espresso.x = 680
-						elseif i == 4 then
-							espresso.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 4
+					espresso:toFront()
+					if i == 1 then
+						espresso.x = 200
+					elseif i == 2 then
+						espresso.x = 440
+					elseif i == 3 then
+						espresso.x = 680
+					elseif i == 4 then
+						espresso.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -674,13 +503,11 @@ function scene:create( event )
 	
 	-- 에스프레소 선택 취소
 	local function espresso_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 4 then
-					selected[i] = 0
-					espresso:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 4 then
+				selected[i] = 0
+				espresso:toBack()
+				break
 			end
 		end
 	end
@@ -689,29 +516,27 @@ function scene:create( event )
 
 	-- 얼음 선택 버튼
 	local function ice_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 5 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 5 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 5
-						ice:toFront()
-						if i == 1 then
-							ice.x = 200
-						elseif i == 2 then
-							ice.x = 440
-						elseif i == 3 then
-							ice.x = 680
-						elseif i == 4 then
-							ice.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 5
+					ice:toFront()
+					if i == 1 then
+						ice.x = 200
+					elseif i == 2 then
+						ice.x = 440
+					elseif i == 3 then
+						ice.x = 680
+					elseif i == 4 then
+						ice.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -720,13 +545,11 @@ function scene:create( event )
 	
 	-- 얼음 선택 취소
 	local function ice_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 5 then
-					selected[i] = 0
-					ice:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 5 then
+				selected[i] = 0
+				ice:toBack()
+				break
 			end
 		end
 	end
@@ -735,29 +558,27 @@ function scene:create( event )
 
 	-- 초코 선택 버튼
 	local function choco_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 6 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 6 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 6
-						choco:toFront()
-						if i == 1 then
-							choco.x = 200
-						elseif i == 2 then
-							choco.x = 440
-						elseif i == 3 then
-							choco.x = 680
-						elseif i == 4 then
-							choco.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 6
+					choco:toFront()
+					if i == 1 then
+						choco.x = 200
+					elseif i == 2 then
+						choco.x = 440
+					elseif i == 3 then
+						choco.x = 680
+					elseif i == 4 then
+						choco.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -766,13 +587,11 @@ function scene:create( event )
 	
 	-- 초코 선택 취소
 	local function choco_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 6 then
-					selected[i] = 0
-					choco:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 6 then
+				selected[i] = 0
+				choco:toBack()
+				break
 			end
 		end
 	end
@@ -781,29 +600,27 @@ function scene:create( event )
 
 	-- 딸기 선택 버튼
 	local function strawberry_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 7 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 7 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 7
-						strawberry:toFront()
-						if i == 1 then
-							strawberry.x = 200
-						elseif i == 2 then
-							strawberry.x = 440
-						elseif i == 3 then
-							strawberry.x = 680
-						elseif i == 4 then
-							strawberry.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 7
+					strawberry:toFront()
+					if i == 1 then
+						strawberry.x = 200
+					elseif i == 2 then
+						strawberry.x = 440
+					elseif i == 3 then
+						strawberry.x = 680
+					elseif i == 4 then
+						strawberry.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -812,13 +629,11 @@ function scene:create( event )
 	
 	-- 딸기 선택 취소
 	local function strawberry_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 7 then
-					selected[i] = 0
-					strawberry:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 7 then
+				selected[i] = 0
+				strawberry:toBack()
+				break
 			end
 		end
 	end
@@ -827,29 +642,27 @@ function scene:create( event )
 
 	-- 바나나 선택 버튼
 	local function banana_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 8 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 8 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 8
-						banana:toFront()
-						if i == 1 then
-							banana.x = 200
-						elseif i == 2 then
-							banana.x = 440
-						elseif i == 3 then
-							banana.x = 680
-						elseif i == 4 then
-							banana.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 8
+					banana:toFront()
+					if i == 1 then
+						banana.x = 200
+					elseif i == 2 then
+						banana.x = 440
+					elseif i == 3 then
+						banana.x = 680
+					elseif i == 4 then
+						banana.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -858,13 +671,11 @@ function scene:create( event )
 	
 	-- 바나나 선택 취소
 	local function banana_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 8 then
-					selected[i] = 0
-					banana:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 8 then
+				selected[i] = 0
+				banana:toBack()
+				break
 			end
 		end
 	end
@@ -873,29 +684,27 @@ function scene:create( event )
 
 	-- 블루베리 선택 버튼
 	local function blueberry_button(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			cntNum = 0
-			for i = 1, 4 do
-				if selected[i] == 9 then
-					cntNum = cntNum + 1
-				end
+		cntNum = 0
+		for i = 1, 4 do
+			if selected[i] == 9 then
+				cntNum = cntNum + 1
 			end
-			if cntNum == 0 then
-				for i = 1, 4 do
-					if selected[i] == 0 then
-						selected[i] = 9
-						blueberry:toFront()
-						if i == 1 then
-							blueberry.x = 200
-						elseif i == 2 then
-							blueberry.x = 440
-						elseif i == 3 then
-							blueberry.x = 680
-						elseif i == 4 then
-							blueberry.x = 920
-						end
-						break
+		end
+		if cntNum == 0 then
+			for i = 1, 4 do
+				if selected[i] == 0 then
+					selected[i] = 9
+					blueberry:toFront()
+					if i == 1 then
+						blueberry.x = 200
+					elseif i == 2 then
+						blueberry.x = 440
+					elseif i == 3 then
+						blueberry.x = 680
+					elseif i == 4 then
+						blueberry.x = 920
 					end
+					break
 				end
 			end
 		end
@@ -904,13 +713,11 @@ function scene:create( event )
 	
 	-- 블루베리 선택 취소
 	local function blueberry_delete(event)
-		if recipeClose == 1 then			--레시피 안열려 있으면
-			for i = 1, 5 do
-				if selected[i] == 9 then
-					selected[i] = 0
-					blueberry:toBack()
-					break
-				end
+		for i = 1, 5 do
+			if selected[i] == 9 then
+				selected[i] = 0
+				blueberry:toBack()
+				break
 			end
 		end
 	end
@@ -920,115 +727,102 @@ function scene:create( event )
 
 --------------만들기 버튼--------------------------------	
 	local function make_drink(event)
-		if doorOpen == 1 then					--문을 클릭해서 열었다면
-			if recipeClose == 1 then			--레시피 안열려 있으면
-				if drinkMade == 0 then			--음료 없다면
-					local waterCnt = 0
-					local milkCnt = 0
-					local syrupCnt = 0
-					local espressoCnt = 0
-					local iceCnt = 0
-					local chocoCnt = 0
-					local strawberryCnt = 0
-					local bananaCnt = 0
-					local blueberryCnt = 0 
-					--재료 선택 여부 확인
+		if doorOpen == 1 then				--문을 클릭해서 열었다면
+			if drinkMade == 0 then			--음료 없다면
+				local waterCnt = 0
+				local milkCnt = 0
+				local syrupCnt = 0
+				local espressoCnt = 0
+				local iceCnt = 0
+				local chocoCnt = 0
+				local strawberryCnt = 0
+				local bananaCnt = 0
+				local blueberryCnt = 0 
+				--재료 선택 여부 확인
+				for i = 1, 4 do
+					if selected[i] == 1 then
+						waterCnt = waterCnt + 1
+					elseif selected[i] == 2 then
+						milkCnt = milkCnt + 1
+					elseif selected[i] == 3 then
+						syrupCnt = syrupCnt + 1
+					elseif selected[i] == 4 then
+						espressoCnt = espressoCnt + 1
+					elseif selected[i] == 5 then
+						iceCnt = iceCnt + 1
+					elseif selected[i] == 6 then
+						chocoCnt = chocoCnt  + 1 
+					elseif selected[i] == 7 then
+						strawberryCnt = strawberryCnt + 1
+					elseif selected[i] == 8 then
+						bananaCnt = bananaCnt + 1
+					elseif selected[i] == 9 then
+						blueberryCnt = blueberryCnt + 1
+					end	
+				end
+				--아메리카노
+				if waterCnt ~= 0 and milkCnt == 0 and syrupCnt == 0 and espressoCnt ~= 0 and iceCnt == 0
+				 and chocoCnt == 0 and strawberryCnt == 0 and bananaCnt == 0 and blueberryCnt == 0 then
+					drinkMade = 1
+					water:toBack()
+					espresso:toBack()
+					americano:toFront()
+					americano.alpha = 1
+				end
+				--바닐라라떼
+				if waterCnt == 0 and milkCnt ~= 0 and syrupCnt ~= 0 and espressoCnt ~= 0 and iceCnt == 0
+				 and chocoCnt == 0 and strawberryCnt == 0 and bananaCnt == 0 and blueberryCnt == 0 then
+					drinkMade = 2
+					milk:toBack()
+					syrup:toBack()
+					espresso:toBack()
+					latte:toFront()
+					latte.alpha = 1
+				end
+				--카페모카
+				if waterCnt == 0 and milkCnt ~= 0 and syrupCnt == 0 and espressoCnt ~= 0 and iceCnt == 0
+				 and chocoCnt ~= 0 and strawberryCnt == 0 and bananaCnt == 0 and blueberryCnt == 0 then
+					drinkMade = 3
+					milk:toBack()
+					espresso:toBack()
+					choco:toBack()
+					mocha:toFront()
+					mocha.alpha = 1
+				end
+				--딸기스무디
+				if waterCnt == 0 and milkCnt == 0 and syrupCnt ~= 0 and espressoCnt == 0 and iceCnt ~= 0
+				 and chocoCnt == 0 and strawberryCnt ~= 0 and bananaCnt == 0 and blueberryCnt == 0 then
+					drinkMade = 4
+					syrup:toBack()
+					ice:toBack()
+					strawberry:toBack()
+					smoothie_s:toFront()
+					smoothie_s.alpha = 1
+				end
+				--바나나스무디
+				if waterCnt == 0 and milkCnt == 0 and syrupCnt ~= 0 and espressoCnt == 0 and iceCnt ~= 0
+				 and chocoCnt == 0 and strawberryCnt == 0 and bananaCnt ~= 0 and blueberryCnt == 0 then
+					drinkMade = 5
+					syrup:toBack()
+					ice:toBack()
+					banana:toBack()
+					smoothie_ba:toFront()
+					smoothie_ba.alpha = 1
+				end
+				--블루베리스무디
+				if waterCnt == 0 and milkCnt == 0 and syrupCnt ~= 0 and espressoCnt == 0 and iceCnt ~= 0
+				 and chocoCnt == 0 and strawberryCnt == 0 and bananaCnt == 0 and blueberryCnt ~= 0 then
+					drinkMade = 6
+					syrup:toBack()
+					ice:toBack()
+					blueberry:toBack()
+					smoothie_b:toFront()
+					smoothie_b.alpha = 1
+				end
+				--초기화
+				if drinkMade ~= 0 then
 					for i = 1, 4 do
-						if selected[i] == 1 then
-							waterCnt = waterCnt + 1
-						elseif selected[i] == 2 then
-							milkCnt = milkCnt + 1
-						elseif selected[i] == 3 then
-							syrupCnt = syrupCnt + 1
-						elseif selected[i] == 4 then
-							espressoCnt = espressoCnt + 1
-						elseif selected[i] == 5 then
-							iceCnt = iceCnt + 1
-						elseif selected[i] == 6 then
-							chocoCnt = chocoCnt  + 1 
-						elseif selected[i] == 7 then
-							strawberryCnt = strawberryCnt + 1
-						elseif selected[i] == 8 then
-							bananaCnt = bananaCnt + 1
-						elseif selected[i] == 9 then
-							blueberryCnt = blueberryCnt + 1
-						end	
-					end
-					--아메리카노
-					if waterCnt ~= 0 and milkCnt == 0 and syrupCnt == 0 and espressoCnt ~= 0 and iceCnt == 0
-					 and chocoCnt == 0 and strawberryCnt == 0 and bananaCnt == 0 and blueberryCnt == 0 then
-						drinkMade = 1
-						water:toBack()
-						espresso:toBack()
-						americano:toFront()
-						americano.alpha = 1
-					end
-					--바닐라라떼
-					if waterCnt == 0 and milkCnt ~= 0 and syrupCnt ~= 0 and espressoCnt ~= 0 and iceCnt == 0
-					 and chocoCnt == 0 and strawberryCnt == 0 and bananaCnt == 0 and blueberryCnt == 0 then
-						drinkMade = 2
-						milk:toBack()
-						syrup:toBack()
-						espresso:toBack()
-						latte:toFront()
-						latte.alpha = 1
-					end
-					--카페모카
-					if waterCnt == 0 and milkCnt ~= 0 and syrupCnt == 0 and espressoCnt ~= 0 and iceCnt == 0
-					 and chocoCnt ~= 0 and strawberryCnt == 0 and bananaCnt == 0 and blueberryCnt == 0 then
-						drinkMade = 3
-						milk:toBack()
-						espresso:toBack()
-						choco:toBack()
-						mocha:toFront()
-						mocha.alpha = 1
-					end
-					--딸기스무디
-					if waterCnt == 0 and milkCnt == 0 and syrupCnt ~= 0 and espressoCnt == 0 and iceCnt ~= 0
-					 and chocoCnt == 0 and strawberryCnt ~= 0 and bananaCnt == 0 and blueberryCnt == 0 then
-						drinkMade = 4
-						syrup:toBack()
-						ice:toBack()
-						strawberry:toBack()
-						smoothie_s:toFront()
-						smoothie_s.alpha = 1
-					end
-					--바나나스무디
-					if waterCnt == 0 and milkCnt == 0 and syrupCnt ~= 0 and espressoCnt == 0 and iceCnt ~= 0
-					 and chocoCnt == 0 and strawberryCnt == 0 and bananaCnt ~= 0 and blueberryCnt == 0 then
-						drinkMade = 5
-						syrup:toBack()
-						ice:toBack()
-						banana:toBack()
-						smoothie_ba:toFront()
-						smoothie_ba.alpha = 1
-					end
-					--블루베리스무디
-					if waterCnt == 0 and milkCnt == 0 and syrupCnt ~= 0 and espressoCnt == 0 and iceCnt ~= 0
-					 and chocoCnt == 0 and strawberryCnt == 0 and bananaCnt == 0 and blueberryCnt ~= 0 then
-						drinkMade = 6
-						syrup:toBack()
-						ice:toBack()
-						blueberry:toBack()
-						smoothie_b:toFront()
-						smoothie_b.alpha = 1
-					end
-					--히든 레시피 (궁극의 딸기바나나 스무디)
-					if waterCnt == 0 and milkCnt == 0 and syrupCnt ~= 0 and espressoCnt == 0 and iceCnt ~= 0
-					 and chocoCnt == 0 and strawberryCnt ~= 0 and bananaCnt ~= 0 and blueberryCnt == 0 then
-						drinkMade = 7
-						syrup:toBack()
-						ice:toBack()
-						strawberry:toBack()
-						banana:toBack()
-						smoothie_sb:toFront()
-						smoothie_sb.alpha = 1
-					end
-					--초기화
-					if drinkMade ~= 0 then
-						for i = 1, 4 do
-							selected[i] = 0
-						end
+						selected[i] = 0
 					end
 				end
 			end
@@ -1060,7 +854,6 @@ function scene:create( event )
  						--- 20번 성공 시 이동
 						score_s.text = score_s.text + 1
 						if (score_s.text == '20') then
-							timeBar:setFillColor(0, 0, 0, 0)
 							timer.cancel(timeAttack) 
 							composer.gotoScene('clear')
 						end
@@ -1153,7 +946,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
-		composer.removeScene('game')
+		composer.removeScene('game_dk')
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
 	end
