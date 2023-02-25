@@ -428,7 +428,7 @@ function scene:create( event )
 			menu.alpha = 0
 		end
 
-		if success < 2 and fail < 5 then											-- 성공 횟수와 실패 횟수가 각각 20번, 5번 미만이라면 타이머를 시작합니다. (게임 종료 시 타이머 기능을 사용하지 않기 위해서 조건문 사용.)
+		if success < 20 and fail < 5 then											-- 성공 횟수와 실패 횟수가 각각 20번, 5번 미만이라면 타이머를 시작합니다. (게임 종료 시 타이머 기능을 사용하지 않기 위해서 조건문 사용.)
 			timeAttack = timer.performWithDelay(1000, counter, 10)			-- 10초 카운트 시작 
 		end
 	end
