@@ -10,6 +10,7 @@ local scene = composer.newScene()
 
 function scene:create( event )
 	local sceneGroup = self.view
+<<<<<<< HEAD
     --클리어 화면 출력
 	local background = display.newImageRect("image/clear_background.png", display.contentWidth, display.contentHeight)
 	background.x, background.y = display.contentWidth/2, display.contentHeight/2
@@ -23,11 +24,30 @@ function scene:create( event )
 	local clear = display.newImageRect("image/clear/clear.png", 1000, 200)
 	clear.x, clear.y = display.contentWidth*0.5, display.contentHeight*0.15
 
+=======
+	
+	local background = display.newImageRect("clear_background.png", display.contentWidth, display.contentHeight)
+	background.x, background.y = display.contentWidth/2, display.contentHeight/2
+	
+	local out = display.newImageRect("out.png", 1000, 200)
+	out.x, out.y = display.contentWidth*0.5, display.contentHeight*0.9
+ 	
+	local retry = display.newImageRect("retry.png",1000 , 200)
+	retry.x, retry.y = display.contentWidth*0.5, display.contentHeight*0.8
+
+	local clear = display.newImageRect("clear.png", 1000, 200)
+	clear.x, clear.y = display.contentWidth*0.5, display.contentHeight*0.15
+	
+>>>>>>> aae2c29cdbe5653013284f91bf4c87e140471e1e
 	sceneGroup:insert(background)
 	sceneGroup:insert(out)
 	sceneGroup:insert(retry)
 	sceneGroup:insert(clear)
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> aae2c29cdbe5653013284f91bf4c87e140471e1e
 	function retry:tap( event )
  		--
  	end
@@ -40,14 +60,22 @@ function scene:create( event )
 	function retry:tap( event )
 		composer.gotoScene('view1')
 	end
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> aae2c29cdbe5653013284f91bf4c87e140471e1e
 end
 
 
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> aae2c29cdbe5653013284f91bf4c87e140471e1e
 	if phase == "will" then
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
@@ -62,14 +90,22 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> aae2c29cdbe5653013284f91bf4c87e140471e1e
 	if event.phase == "will" then
 		-- Called when the scene is on screen and is about to move off screen
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> aae2c29cdbe5653013284f91bf4c87e140471e1e
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
 
@@ -78,7 +114,11 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> aae2c29cdbe5653013284f91bf4c87e140471e1e
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	-- 
 	-- INSERT code here to cleanup the scene
