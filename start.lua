@@ -33,6 +33,9 @@ function scene:create( event )
 	start_button:addEventListener("touch", start_button_event)
 	 --------------------------------------------------------------------------------------------------------------------
 
+	  sceneGroup:insert(background)
+	  sceneGroup:insert(start_button)
+
 end
 
 function scene:show( event )

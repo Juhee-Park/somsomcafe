@@ -10,33 +10,31 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 	
-	-- Called when the scene's view does not exist.
-	-- 
-	-- INSERT code here to initialize the scene
-	-- e.g. add display objects to 'sceneGroup', add touch listeners, etc.
 	
-	-- create a white background to fill screen
-	local background = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
-	background:setFillColor( 1 )	-- white
-	
-	-- create some text
-	local title = display.newText( "First View", display.contentCenterX, 125, native.systemFont, 32 )
-	title:setFillColor( 0 )	-- black
-	
-	local newTextParams = { text = "Loaded by the first tab's\n\"onPress\" listener\nspecified in the 'tabButtons' table", 
-						x = display.contentCenterX + 10, 
-						y = title.y + 215, 
-						width = 310, height = 310, 
-						font = native.systemFont, fontSize = 14, 
-						align = "center" }
-	local summary = display.newText( newTextParams )
-	summary:setFillColor( 0 ) -- black
+	--------------------------------------------------------------------------------------------------------------------
+	-- 게임 시작 페이지 (작업자 : 박주희) 
 
-	
-	-- all objects must be added to group (e.g. self.view)
-	sceneGroup:insert( background )
-	sceneGroup:insert( title )
-	sceneGroup:insert( summary )
+	-- 배경이미지 삽입
+	local background = display.newImageRect("img/fail_background.png", display.contentWidth, display.contentHeight)
+ 	background.x, background.y = display.contentWidth/2, display.contentHeight/2
+
+	-- 재시작 버튼 이미지 삽입
+	local restart_button = display.newImage("img/clear/retry.png")
+ 	restart_button.x, restart_button.y = 719, 1976
+	-- 시작 버튼 이벤트
+	local function restart_button_event( event )  
+ 		if( event.phase == "began" ) then  
+ 			composer.gotoScene( "game_juhee" )
+ 		end  
+ 	end
+	 
+	-- 팝업 닫기 이벤트 적용
+	restart_button:addEventListener("touch", restart_button_event)
+	 --------------------------------------------------------------------------------------------------------------------
+
+	  sceneGroup:insert(background)
+	  sceneGroup:insert(restart_button)
+
 end
 
 function scene:show( event )
