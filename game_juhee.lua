@@ -10,29 +10,35 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 	
-	
 	--------------------------------------------------------------------------------------------------------------------
-	-- 게임 시작 페이지 (작업자 : 박주희) 
+	-- 게임 시작 시 팝업 출력 (작업자 : 박주희)        완료
 
 	-- 배경이미지 삽입
-	local background = display.newImageRect("img/start_background.png", display.contentWidth, display.contentHeight)
+	local background = display.newImageRect("img/main_background.png", display.contentWidth, display.contentHeight)
  	background.x, background.y = display.contentWidth/2, display.contentHeight/2
 
-	-- 시작 버튼 이미지 삽입
-	local start_button = display.newImage("img/start/start.png")
- 	start_button.x, start_button.y = 700, 2260
 
-	-- 시작 버튼 이벤트
-	local function start_button_event( event )  
+	-- 팝업 이미지 삽입 
+	local popup = display.newImage("img/main_popup/popup.png")
+ 	popup.x, popup.y = 735, 2000
+
+	-- 팝업 버튼 이미지 삽입
+	local popup_button = display.newImage("img/main_popup/popup_button.png")
+ 	popup_button.x, popup_button.y = 1176, 2242
+
+	-- 팝업 닫기 이벤트
+	local function popupOff( event )  
  		if( event.phase == "began" ) then  
- 			composer.gotoScene( "game_juhee" )
+ 			display.remove(popup) 
+			display.remove(popup_button) 
  		end  
  	end
 	 
 	-- 팝업 닫기 이벤트 적용
-	start_button:addEventListener("touch", start_button_event)
+	popup_button:addEventListener("touch", popupOff)
 	 --------------------------------------------------------------------------------------------------------------------
-
+	
+	
 end
 
 function scene:show( event )
