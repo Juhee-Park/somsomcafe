@@ -541,6 +541,7 @@ pause:addEventListener("touch", stop)
 	 			--효과음
 				audio.play(coffee_down, {channel=1})
 		 		doorOpen = 1
+				pause.alpha = 1
 
 		 		customer[1] = display.newImage(customerGroup, "img/main/character/customer1.png", display.contentCenterX, display.contentCenterY)
 		 		customer[1].x , customer[1].y = 355, 2124
