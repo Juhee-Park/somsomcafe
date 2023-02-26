@@ -24,15 +24,16 @@ function scene:create( event )
 	-- 쓰레기 통
 	local trash = display.newImage("img/main/trash.png", display.contentCenterX, display.contentCenterY)
 	trash.x, trash.y = 470, 924
+	local stopGroup = display.newGroup()
 	-- 일시정지 버튼
-	local pause = display.newImage("img/main/trash.png", display.contentCenterX, display.contentCenterY)
+	local pause = display.newImage(stopGroup, "img/main/trash.png", display.contentCenterX, display.contentCenterY)
 	pause.x, pause.y = 50, 50
 	pause.alpha = 0
 	-- 시간 멈춤 여부
 	local timestop = 0
 	-- 일시정지 팝업
 	local stop_background 
-	stop_background = display.newImage("img/recipe_background.png", display.contentCenterX, display.contentCenterY)
+	stop_background = display.newImage(stopGroup, "img/recipe_background.png", display.contentCenterX, display.contentCenterY)
 	stop_background.x, stop_background.y = display.contentWidth/2, display.contentHeight/2
 	stop_background.alpha = 0
 	-- 물 버튼
@@ -300,8 +301,7 @@ function scene:create( event )
 	sceneGroup:insert(door)
 	sceneGroup:insert(group)
 	sceneGroup:insert(tableGroup)
-	sceneGroup:insert(pause)
-	sceneGroup:insert(stop_background)
+	sceneGroup:insert(stopGroup)
 -----------------------------------------------------------
 
 --------------------일시정지------------------------------
@@ -328,7 +328,7 @@ function scene:create( event )
 
 				stop_background.alpha = 1
 				-- 맨 앞에 출력 되게
-		--tableGroup:toFront()
+				stopGroup:toFront()
 			else
 				recipeClose = 1
 				timer.resume(timeAttack)
