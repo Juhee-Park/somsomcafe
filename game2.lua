@@ -307,6 +307,7 @@ function scene:create( event )
 		if( event.phase == "began") then 
 			if timestop == 0 then
 				recipeClose = 0
+				recipe.alpha = 0
  				timer.pause(timeAttack)
 				timestop = 1
 				--타임바 안보이게
@@ -330,6 +331,7 @@ function scene:create( event )
 				recipeClose = 1
 				timer.resume(timeAttack)
 				timestop = 0
+				recipe.alpha = 1
 				--타임바 보이게
 				if timeBar ~= nil then
 					timeBar.alpha = 1
