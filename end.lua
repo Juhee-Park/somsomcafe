@@ -27,6 +27,16 @@ function scene:create( event )
 	gameTip.size = 70
 	gameTip:setFillColor(0)
 	gameTip.y = gameTip.y + 750
+	--진엔딩 조건 팁 상단
+	local gameTipUp = display.newText("", display.contentCenterX, display.contentCenterY)
+	gameTipUp.size = 60
+	gameTipUp:setFillColor(0)
+	gameTipUp.y = gameTipUp.y + 675
+	--진엔딩 조건 팁 하단
+	local gameTipDown = display.newText("", display.contentCenterX, display.contentCenterY)
+	gameTipDown.size = 60
+	gameTipDown:setFillColor(0)
+	gameTipDown.y = gameTipDown.y + 825
 	-- 출력하는 학점
 	local grade = display.newText("F", display.contentCenterX, display.contentCenterY)
 	grade.size = 100
@@ -46,7 +56,7 @@ function scene:create( event )
 	--셋째날
 	local thirdDay = composer.getVariable("thirdDay")
 	-- 받아오는 평균 소요 시간
-	local avgTime = 9
+	local avgTime = 1
 	-- 학교 건물 사진
 	local schoolImg
 	-- 클리어 소리
@@ -70,6 +80,8 @@ function scene:create( event )
 	sceneGroup:insert(grade)
 	sceneGroup:insert(avgTimeN)
 	sceneGroup:insert(gameTip)
+	sceneGroup:insert(gameTipUp)
+	sceneGroup:insert(gameTipDown)
 
 	-- 특별한 손님 성공 확인
 	specialSuccess1 = composer.getVariable("specialSuccess1")
@@ -89,7 +101,9 @@ function scene:create( event )
 	if specialSuccess1 == 1 or specialSuccess2 == 1 or specialSuccess3 == 1 then		-- 특별 음료 제공 성공
 		grade.text = '학점 : S++'
 		avgTimeN.text = "평균 소요 시간 : "
-		gameTip.text = '           플레이 해주셔서 감사합니다! \n 학점별로 학교의 다양한 위치를 담았습니다. \n  지금까지 동덕여대 솜솜피움 팀이었습니다'
+		gameTipUp.text = '플레이 해주셔서 감사합니다!'
+		gameTip.text = '학점별로 학교의 다양한 위치를 담았습니다.'
+		gameTipDown.text = '지금까지 동덕여대 솜솜피움 팀이었습니다'
 		gameTip.size = 60
 		--추후 수정 필요
 		schoolImg = display.newImageRect("img/school/yakhak.jpg", 1200, 900)	-- 궁극의 레시피로 변경
@@ -100,7 +114,9 @@ function scene:create( event )
 		if avgTime <= 5 then
 			grade.text = '학점 : A+'
 			avgTimeN.text = "평균 소요 시간 : ".. avgTime .. ' 초'
-			gameTip.text = '<    Tip : 이건 김딸기 교수님께서 \n      제일 좋아하시는 레시피잖아? \n      교수님께 만들어드리자!          >'
+			gameTipUp.text = '<    Tip : 이건 김딸기 교수님께서'
+			gameTip.text = '제일 좋아하시는 레시피잖아?'
+			gameTipDown.text = '교수님께 만들어드리자!   >'
 			gameTip.size = 60
 			--추후 수정 필요
 			schoolImg = display.newImageRect("img/school/yakhak.jpg", 1200, 900)	-- 궁극의 레시피로 변경
