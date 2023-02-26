@@ -13,27 +13,31 @@ function scene:create( event )
     --클리어 화면 출력
 	local background = display.newImage("img/clear_background.png", display.contentCenterX, display.contentCenterY)
  
-    --다시하기 
-	local retry = display.newImage("img/clear/retry.png", display.contentCenterX, display.contentCenterY)
-	retry.x = 751
-	retry.y = 1723
-	
+    --넘어가기
+	local goNext = display.newImage("img/clear/retry.png", display.contentCenterX, display.contentCenterY)
+	goNext.x = 751
+	goNext.y = 1723
+	-- 클리어 소리
+	local clear_page = audio.loadSound("sound/clear_page.mp3")
+	audio.play(clear_page, {channel=3})
+
+	audio.setVolume( 0, { channel=2 } ) 
+	audio.setVolume( 1, { channel=3 } ) 
+
 	sceneGroup:insert(background)
-	sceneGroup:insert(retry)
-	sceneGroup:insert(out)
+	sceneGroup:insert(goNext)
 
 	
 	local function retry_button(event)
-		print("시작화면으로")
-		composer.gotoScene('game3')
-	end
- 	retry:addEventListener("tap", retry_button) -- 다시하기 누르면 게임화면으로
+		print("2일차로")
 
- 	local function out_button(event)
-		native.requestExit()
- 	end
- 	out:addEventListener("tap", out_button)
-	
+		audio.setVolume( 0.3, { channel=2 } ) 
+		audio.setVolume( 0, { channel=3 } ) 
+
+		composer.gotoScene('game3')
+
+	end
+ 	goNext:addEventListener("tap", retry_button) -- 2일차로
 end
 
 function scene:show( event )
@@ -59,7 +63,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
-		composer.removeScene('clear')
+		composer.removeScene('clear2')
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
 	end
