@@ -32,7 +32,8 @@ function scene:create( event )
 	-- 시작 버튼 이벤트
 	local function restart_button_event( event )  
  		if( event.phase == "began" ) then  
-			audio.setVolume( 0.3, { channel=2 } ) 
+			audio.setVolume( 0.3, { channel=2 } )
+			audio.rewind( { channel=2 } ) 
 			audio.setVolume( 0, { channel=3 } ) 
  			composer.gotoScene( "game1" )
  		end  

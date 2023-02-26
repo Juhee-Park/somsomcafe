@@ -32,6 +32,7 @@ function scene:create( event )
 		print("3일차로")
 
 		audio.setVolume( 0.3, { channel=2 } ) 
+		audio.rewind( { channel=2 } )
 		audio.setVolume( 0, { channel=3 } ) 
 
 		composer.gotoScene('game3')

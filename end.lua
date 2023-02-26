@@ -187,6 +187,7 @@ function scene:create( event )
 	local function retry_button(event)
 		print("시작화면으로")
 		audio.setVolume( 0.3, { channel=2 } ) 
+		audio.rewind( { channel=2 } )
 		audio.setVolume( 0, { channel=3 } ) 
 		composer.gotoScene('start')
 	end
