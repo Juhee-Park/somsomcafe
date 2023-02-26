@@ -354,8 +354,10 @@ function scene:create( event )
 
 		if timeBar == nil then 				-- 시간 소요를 나타내는 바 생성. 시간이 지날 수록 바의 크기가 줄어들게 설정했습니다. (10초)
 			timeBar = display.newRect(836, 1594, 353 - 35.3*count, 64)
+		elseif count == 10 then
+			timeBar.width, timeBar.x = 353 - 35.3, 836 
 		else
-			timeBar.width, timeBar.x = 353 - 35.3 * count, 836 - 16 * (count-1)
+			timeBar.width, timeBar.x = 353 - 35.3 * (count + 1), 836 - 16 * count
 		end
 
 		timeBar:setFillColor(1, 0, 0, 1)		-- 바의 색깔은 빨강색으로 했습니다. 
@@ -367,6 +369,7 @@ function scene:create( event )
 			-- 5번 실패 시 이동
  			score_f.text = "실패 : " .. fail .. " /  5"
 			if (fail == 5) then
+				timeBar.width = 0
 				composer.gotoScene('fail')
 			end
 			print("성공 횟수: " .. success)
@@ -393,6 +396,9 @@ function scene:create( event )
 
 			sceneGroup:insert(dialog)
 			sceneGroup:insert(bar)
+			timeAttack = timer.performWithDelay(1000, counter, 11)
+		elseif success < 10 and fail < 5 then									-- 성공 횟수와 실패 횟수가 각각 20번, 5번 미만이라면 타이머를 시작합니다. (게임 종료 시 타이머 기능을 사용하지 않기 위해서 조건문 사용.)
+			timeAttack = timer.performWithDelay(1000, counter, 10)			-- 10초 카운트 시작 
 		end
 
 
@@ -414,10 +420,6 @@ function scene:create( event )
 		--레시피 열었을 때 안보이게 생성
 		if recipeClose ~= 1 then
 			menu.alpha = 0
-		end
-
-		if success < 10 and fail < 5 then									-- 성공 횟수와 실패 횟수가 각각 20번, 5번 미만이라면 타이머를 시작합니다. (게임 종료 시 타이머 기능을 사용하지 않기 위해서 조건문 사용.)
-			timeAttack = timer.performWithDelay(1000, counter, 10)			-- 10초 카운트 시작 
 		end
 	end
 
@@ -1115,7 +1117,8 @@ function scene:create( event )
 							print("다음날로 이동")
 							composer.setVariable( "secondDay", secondDay )
 							timeBar:setFillColor(0, 0, 0, 0)
-							timer.cancel(timeAttack) 
+							timer.cancel(timeAttack)
+							timeBar.width = 0
 							composer.gotoScene('clear2')
 						end
 					----------- 특별한 손님 특별한 메뉴 성공
@@ -1135,6 +1138,7 @@ function scene:create( event )
 							composer.setVariable( "secondDay", secondDay )
 							timeBar:setFillColor(0, 0, 0, 0)
 							timer.cancel(timeAttack) 
+							timeBar.width = 0
 							composer.gotoScene('clear2')
 						end
  					else
@@ -1146,11 +1150,14 @@ function scene:create( event )
 							if timeBar ~= nil then
 								timeBar.alpha = 0
 							end
+							timeBar.width = 0
+							timeBar.width = 0
 							composer.gotoScene('fail')
 						end
  					end
 
  					--타이머 초기화
+					timeBar.width, timeBar.x = 353 - 35.3, 836
  					timer.cancel(timeAttack)
  					count = 0
 					newCustomerEnter()

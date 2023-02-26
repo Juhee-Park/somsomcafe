@@ -1163,6 +1163,7 @@ function scene:create( event )
  					end
 
  					--타이머 초기화
+					timeBar.width, timeBar.x = 353 - 35.3, 836
  					timer.cancel(timeAttack)
  					count = 0
 					newCustomerEnter()
