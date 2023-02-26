@@ -22,9 +22,18 @@ function scene:create( event )
 	local restart_button = display.newImage("img/clear/retry.png")
  	restart_button.x, restart_button.y = 751, 1723
  	
+	-- 실패 소리
+	local fail_page = audio.loadSound("sound/fail_page.mp3")
+	audio.play(fail_page, {channel=3})
+
+	audio.setVolume( 0, { channel=2 } ) 
+	audio.setVolume( 1, { channel=3 } ) 
+
 	-- 시작 버튼 이벤트
 	local function restart_button_event( event )  
  		if( event.phase == "began" ) then  
+			audio.setVolume( 0.3, { channel=2 } ) 
+			audio.setVolume( 0, { channel=3 } ) 
  			composer.gotoScene( "game" )
  		end  
  	end

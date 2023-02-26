@@ -233,7 +233,17 @@ function scene:create( event )
 	local line = {}
 	local drink = {}
 	local ingredient = {}
-	
+	----효과음
+	--재료 클릭 시 
+	local ingred_clink = audio.loadSound("sound/ingred_click.mp3")
+	-- 만들기 버튼
+	local make_button_click = audio.loadSound("sound/make_button_click_trash_can.mp3")
+	-- 음료 건넸을 때
+	local coffee_down = audio.loadSound("sound/new_somsom_in.mp3")
+	-- 레시피 북 열기
+	local recipebook_open = audio.loadSound("sound/recipebook_open.mp3")
+	-- 레시피 북 닫기
+	local recipebook_close = audio.loadSound("sound/recipebook_close.mp3")
 -----------------------------------------------------------
 
 	sceneGroup:insert(water)
@@ -277,6 +287,7 @@ function scene:create( event )
 	-- 팝업 닫기 이벤트
 	local function popupOff( event )  
  		if( event.phase == "began") then 
+			audio.play(ingred_clink, {channel=1})
 			if(popup.alpha == 1) then
  				popup.alpha = 0
 				popup2.alpha = 1
@@ -297,6 +308,7 @@ function scene:create( event )
 	function recipe:tap( event )
 		--레시피 엶
 		recipeClose = 0
+		audio.play(recipebook_open, {channel=1})
 		--타임바 안보이게
 		if timeBar ~= nil then
 			timeBar.alpha = 0
@@ -307,6 +319,7 @@ function scene:create( event )
 		--레시피 닫기 이벤트
 		local function recipe_off( event )  
  			if( event.phase == "began" ) then  
+				audio.play(recipebook_close, {channel=1})
 				--레시피 닫음
 				recipeClose = 1
 				--타임바 보이게
@@ -417,7 +430,8 @@ function scene:create( event )
 	-- 새 손님 넣기. 음료 제조에 성공했을 때에도 newCustomerEnter 함수를 호출해야 합니다. 
 	function newCustomerEnter() 
 		local pickCustomer
-
+		-- 효과음
+		audio.play(coffee_down, {channel=1})
 		-- 스페셜 손님 온지 얼마나 지났는지 확인용
 		if specialCustomer == 1 then
 			specialCnt = specialCnt + 1
@@ -465,6 +479,8 @@ function scene:create( event )
  		--문 이미 열었는지 여부
  		if doorOpen == 0 then
 	 		if popupClose == 1 then
+	 			--효과음
+				audio.play(coffee_down, {channel=1})
 		 		doorOpen = 1
 
 		 		customer[1] = display.newImage(customerGroup, "img/main/character/customer.png", display.contentCenterX, display.contentCenterY)
@@ -488,6 +504,7 @@ function scene:create( event )
 	-- 물 선택 버튼
 	local function water_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 1 then
@@ -519,6 +536,7 @@ function scene:create( event )
 	-- 물 선택 취소
 	local function water_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 1 then
 					selected[i] = 0
@@ -534,6 +552,7 @@ function scene:create( event )
 	-- 우유 선택 버튼
 	local function milk_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 2 then
@@ -565,6 +584,7 @@ function scene:create( event )
 	-- 우유 선택 취소
 	local function milk_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 2 then
 					selected[i] = 0
@@ -580,6 +600,7 @@ function scene:create( event )
 	-- 시럽 선택 버튼
 	local function syrup_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 3 then
@@ -611,6 +632,7 @@ function scene:create( event )
 	-- 시럽 선택 취소
 	local function syrup_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 3 then
 					selected[i] = 0
@@ -626,6 +648,7 @@ function scene:create( event )
 	-- 에스프레소 선택 버튼
 	local function espresso_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 4 then
@@ -657,6 +680,7 @@ function scene:create( event )
 	-- 에스프레소 선택 취소
 	local function espresso_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 4 then
 					selected[i] = 0
@@ -672,6 +696,7 @@ function scene:create( event )
 	-- 얼음 선택 버튼
 	local function ice_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 5 then
@@ -703,6 +728,7 @@ function scene:create( event )
 	-- 얼음 선택 취소
 	local function ice_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 5 then
 					selected[i] = 0
@@ -718,6 +744,7 @@ function scene:create( event )
 	-- 초코 선택 버튼
 	local function choco_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 6 then
@@ -749,6 +776,7 @@ function scene:create( event )
 	-- 초코 선택 취소
 	local function choco_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 6 then
 					selected[i] = 0
@@ -764,6 +792,7 @@ function scene:create( event )
 	-- 딸기 선택 버튼
 	local function strawberry_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 7 then
@@ -795,6 +824,7 @@ function scene:create( event )
 	-- 딸기 선택 취소
 	local function strawberry_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 7 then
 					selected[i] = 0
@@ -810,6 +840,7 @@ function scene:create( event )
 	-- 바나나 선택 버튼
 	local function banana_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 8 then
@@ -841,6 +872,7 @@ function scene:create( event )
 	-- 바나나 선택 취소
 	local function banana_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 8 then
 					selected[i] = 0
@@ -856,6 +888,7 @@ function scene:create( event )
 	-- 블루베리 선택 버튼
 	local function blueberry_button(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			cntNum = 0
 			for i = 1, 4 do
 				if selected[i] == 9 then
@@ -887,6 +920,7 @@ function scene:create( event )
 	-- 블루베리 선택 취소
 	local function blueberry_delete(event)
 		if recipeClose == 1 then			--레시피 안열려 있으면
+			audio.play(ingred_clink, {channel=1})
 			for i = 1, 5 do
 				if selected[i] == 9 then
 					selected[i] = 0
@@ -905,6 +939,7 @@ function scene:create( event )
 		if doorOpen == 1 then					--문을 클릭해서 열었다면
 			if recipeClose == 1 then			--레시피 안열려 있으면
 				if drinkMade == 0 then			--음료 없다면
+					audio.play(make_button_click, {channel=1})
 					local waterCnt = 0
 					local milkCnt = 0
 					local syrupCnt = 0
@@ -1021,6 +1056,7 @@ function scene:create( event )
 ------------------ 쓰레기통 클릭 시 음료 버림 -----------------------------------------
 	local function drink_delete( event )
 		if drinkMade ~= 0 then
+			audio.play(make_button_click, {channel=1})
 			if drinkMade == 1 then
  				drinkMade = 0
  				americano.alpha = 0
@@ -1066,6 +1102,7 @@ function scene:create( event )
 	 			--테이블에 놓으면
 	 			if  987 < event.target.x and event.target.x < 1320
  					and 1600 < event.target.y  and event.target.y < 1840 then
+					audio.play(coffee_down, {channel=1})
  					----------- 알맞은/틀린 음료 건네면 성공/실패 카운트
  					if pickMenu == drinkMade and count ~= 10 then
  						success = success + 1
@@ -1125,6 +1162,7 @@ function scene:create( event )
 	 				event.target.x = event.xStart
 	 				event.target.y = event.yStart
 	 			else
+					audio.play(ingred_clink, {channel=1})
 	 				-- 원래 자리로 돌아감
 	 				event.target.x = event.xStart
 	 				event.target.y = event.yStart

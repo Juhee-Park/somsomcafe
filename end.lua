@@ -55,6 +55,12 @@ function scene:create( event )
 	local avgTime = 3
 	-- 학교 건물 사진
 	local schoolImg
+	-- 클리어 소리
+	local clear_page = audio.loadSound("sound/clear_page.mp3")
+	audio.play(clear_page, {channel=3})
+
+	audio.setVolume( 0, { channel=2 } ) 
+	audio.setVolume( 1, { channel=3 } ) 
 
 	sceneGroup:insert(background)
 	sceneGroup:insert(retry)
@@ -131,6 +137,8 @@ function scene:create( event )
 
 	local function retry_button(event)
 		print("시작화면으로")
+		audio.setVolume( 0.3, { channel=2 } ) 
+		audio.setVolume( 0, { channel=3 } ) 
 		composer.gotoScene('start')
 	end
  	retry:addEventListener("tap", retry_button) -- 다시하기 누르면 게임화면으로
