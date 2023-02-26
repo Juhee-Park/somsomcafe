@@ -369,7 +369,7 @@ function scene:create( event )
 			-- 5번 실패 시 이동
  			score_f.text = "실패 : " .. fail .. " /  5"
 			if (fail == 5) then
-				timeBar.width = 0
+				timeBar.alpha = 0
 				composer.gotoScene('fail')
 			end
 			print("성공 횟수: " .. success)
@@ -1117,7 +1117,7 @@ function scene:create( event )
 							print("다음날로 이동")
 							composer.setVariable( "secondDay", secondDay )
 							timeBar:setFillColor(0, 0, 0, 0)
-							timeBar.width = 0
+							timeBar.alpha = 0
 							timer.cancel(timeAttack)
 							composer.gotoScene('clear2')
 						end
@@ -1137,7 +1137,7 @@ function scene:create( event )
 							print("다음날로 이동")
 							composer.setVariable( "secondDay", secondDay )
 							timeBar:setFillColor(0, 0, 0, 0)
-							timeBar.width = 0
+							timeBar.alpha = 0
 							timer.cancel(timeAttack) 
 							composer.gotoScene('clear2')
 						end
@@ -1146,7 +1146,7 @@ function scene:create( event )
  						--- 5번 실패 시 이동
  						score_f.text = "실패 : " .. fail .. " /  5"
 						if (fail == 5) then
-							timeBar.width = 0
+							timeBar.alpha = 0
 							timer.cancel(timeAttack) 
 							if timeBar ~= nil then
 								timeBar.alpha = 0
