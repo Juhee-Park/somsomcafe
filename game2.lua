@@ -1117,8 +1117,8 @@ function scene:create( event )
 							print("다음날로 이동")
 							composer.setVariable( "secondDay", secondDay )
 							timeBar:setFillColor(0, 0, 0, 0)
-							timer.cancel(timeAttack)
 							timeBar.width = 0
+							timer.cancel(timeAttack)
 							composer.gotoScene('clear2')
 						end
 					----------- 특별한 손님 특별한 메뉴 성공
@@ -1137,8 +1137,8 @@ function scene:create( event )
 							print("다음날로 이동")
 							composer.setVariable( "secondDay", secondDay )
 							timeBar:setFillColor(0, 0, 0, 0)
-							timer.cancel(timeAttack) 
 							timeBar.width = 0
+							timer.cancel(timeAttack) 
 							composer.gotoScene('clear2')
 						end
  					else
@@ -1146,12 +1146,11 @@ function scene:create( event )
  						--- 5번 실패 시 이동
  						score_f.text = "실패 : " .. fail .. " /  5"
 						if (fail == 5) then
+							timeBar.width = 0
 							timer.cancel(timeAttack) 
 							if timeBar ~= nil then
 								timeBar.alpha = 0
 							end
-							timeBar.width = 0
-							timeBar.width = 0
 							composer.gotoScene('fail')
 						end
  					end

@@ -24,6 +24,17 @@ function scene:create( event )
 	-- 쓰레기 통
 	local trash = display.newImage("img/main/trash.png", display.contentCenterX, display.contentCenterY)
 	trash.x, trash.y = 470, 924
+	-- 일시정지 버튼
+	local pause = display.newImage("img/main/trash.png", display.contentCenterX, display.contentCenterY)
+	pause.x, pause.y = 50, 50
+	pause.alpha = 0
+	-- 시간 멈춤 여부
+	local timestop = 0
+	-- 일시정지 팝업
+	local stop_background 
+	stop_background = display.newImage("img/recipe_background.png", display.contentCenterX, display.contentCenterY)
+	stop_background.x, stop_background.y = display.contentWidth/2, display.contentHeight/2
+	stop_background.alpha = 0
 	-- 물 버튼
 	local waterB = display.newImage("img/recipe/water.png", display.contentCenterX, display.contentCenterY)
 	waterB.x = 242
@@ -289,8 +300,56 @@ function scene:create( event )
 	sceneGroup:insert(door)
 	sceneGroup:insert(group)
 	sceneGroup:insert(tableGroup)
+	sceneGroup:insert(pause)
+	sceneGroup:insert(stop_background)
 -----------------------------------------------------------
 
+--------------------일시정지------------------------------
+
+	local function stop( event )
+		if( event.phase == "began") then 
+			if timestop == 0 then
+				recipeClose = 0
+ 				timer.pause(timeAttack)
+				timestop = 1
+				--타임바 안보이게
+				if timeBar ~= nil then
+					timeBar.alpha = 0
+				end
+				--손님 안 보이게
+				customerGroup.alpha = 0
+				--음료 안 보이게
+				if menu ~= nil then
+					menu.alpha = 0
+					dialog.alpha = 0
+					bar.alpha = 0
+				end
+				pause.alpha = 1
+
+				stop_background.alpha = 1
+				-- 맨 앞에 출력 되게
+		--tableGroup:toFront()
+			else
+				recipeClose = 1
+				timer.resume(timeAttack)
+				timestop = 0
+				--타임바 보이게
+				if timeBar ~= nil then
+					timeBar.alpha = 1
+				end
+				--닫을 때 손님 다시 보이게
+				customerGroup.alpha = 1
+				--닫을 때 음료 다시 보이게
+				if menu ~= nil then
+					menu.alpha = 1
+					dialog.alpha = 1
+					bar.alpha = 1
+				end
+				stop_background.alpha = 0
+			end	
+		end
+	 end
+pause:addEventListener("touch", stop)
 ----------------------팝업 닫기-----------------------------
 	-- 팝업 닫기 이벤트
 	local function popupOff( event )  
@@ -321,6 +380,8 @@ function scene:create( event )
 		if timeBar ~= nil then
 			timeBar.alpha = 0
 		end
+		-- 문 안 보이게
+		door.alpha = 0
 		tableGroup.alpha = 1
 		-- 맨 앞에 출력 되게
 		tableGroup:toFront()
@@ -341,6 +402,8 @@ function scene:create( event )
 					menu.alpha = 1
 				end
 				tableGroup.alpha = 0
+				-- 문 보이게
+				door.alpha = 1
 	 		end  
 		end
 	 
@@ -484,6 +547,7 @@ function scene:create( event )
 	 		if popupClose == 1 then
 	 			--효과음
 				audio.play(coffee_down, {channel=1})
+				pause.alpha = 1
 		 		doorOpen = 1
 
 		 		customer[1] = display.newImage(customerGroup, "img/main/character/customer1.png", display.contentCenterX, display.contentCenterY)
@@ -1123,8 +1187,8 @@ function scene:create( event )
 							print("다음날로 이동")
 							composer.setVariable( "firstDay", firstDay )
 							timeBar:setFillColor(0, 0, 0, 0)
-							timer.cancel(timeAttack)
 							timeBar.width = 0
+							timer.cancel(timeAttack)
 							composer.gotoScene('clear')
 						end
  					----------- 특별한 손님 특별한 메뉴 성공
@@ -1144,8 +1208,8 @@ function scene:create( event )
 							print("다음날로 이동")
 							composer.setVariable( "firstDay", firstDay )
 							timeBar:setFillColor(0, 0, 0, 0)
+							timeBar.width = 0
 							timer.cancel(timeAttack) 
-							ttimeBar.width = 0
 							composer.gotoScene('clear')
 						end
  					else
@@ -1153,11 +1217,11 @@ function scene:create( event )
  						--- 5번 실패 시 이동
  						score_f.text = "실패 : " .. fail .. " /  5"
 						if (fail == 5) then
+							timeBar.width = 0
 							timer.cancel(timeAttack) 
 							if timeBar ~= nil then
 								timeBar.alpha = 0
 							end
-							timeBar.width = 0
 							composer.gotoScene('fail')
 						end
  					end
