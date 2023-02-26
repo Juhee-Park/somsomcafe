@@ -415,8 +415,10 @@ pause:addEventListener("touch", stop)
 
 		if timeBar == nil then 				-- 시간 소요를 나타내는 바 생성. 시간이 지날 수록 바의 크기가 줄어들게 설정했습니다. (10초)
 			timeBar = display.newRect(836, 1594, 353 - 35.3*count, 64)
+			sceneGroup:insert(timeBar)
+			bar:toFront()
 		elseif count == 10 then
-			timeBar.width, timeBar.x = 353 - 35.3, 836 
+			timeBar.width, timeBar.x = 340 - 35.3, 836 
 		else
 			timeBar.width, timeBar.x = 353 - 35.3 * (count + 1), 836 - 16 * count
 		end
@@ -1214,7 +1216,7 @@ pause:addEventListener("touch", stop)
  					end
 
  					--타이머 초기화
-					timeBar.width, timeBar.x = 353 - 35.3, 836
+					timeBar.width, timeBar.x = 340 - 35.3, 836
  					timer.cancel(timeAttack)
  					count = 0
 					newCustomerEnter()
