@@ -29,7 +29,7 @@ function scene:create( event )
 
 	
 	local function retry_button(event)
-		print("2일차로")
+		print("3일차로")
 
 		audio.setVolume( 0.3, { channel=2 } ) 
 		audio.setVolume( 0, { channel=3 } ) 

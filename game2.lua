@@ -157,6 +157,8 @@ function scene:create( event )
 	local specialCustomer = 0
 	--특별한 메뉴 
 	local specialCnt = 0
+	-- 성공 소요 시간 합산
+	local secondDay = 0
 	------------------------------------
 	-- 문
 	local door = display.newImage("img/main/button/door.png")
@@ -1105,10 +1107,16 @@ function scene:create( event )
 					audio.play(coffee_down, {channel=1})
  					----------- 알맞은/틀린 음료 건네면 성공/실패 카운트
  					if pickMenu == drinkMade and count ~= 10 then
+ 						-- 소요 시간 더하기
+ 						secondDay = secondDay + count
+ 						print("소요 시간: " .. secondDay)
  						success = success + 1
  						--- 20번 성공 시 이동
 						score_s.text = "성공 : " .. success .. " /  10"
 						if (success == 10) then
+							-- 소요 시간 전달
+							print("다음날로 이동")
+							composer.setVariable( "secondDay", secondDay )
 							timeBar:setFillColor(0, 0, 0, 0)
 							timer.cancel(timeAttack) 
 							composer.gotoScene('clear2')
@@ -1210,7 +1218,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
-		composer.removeScene('game')
+		composer.removeScene('game2')
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
 	end
