@@ -375,6 +375,7 @@ pause:addEventListener("touch", stop)
 	function recipe:tap( event )
 		--레시피 엶
 		recipeClose = 0
+		pause.alpha = 0
 		audio.play(recipebook_open, {channel=1})
 		--타임바 안보이게
 		if timeBar ~= nil then
@@ -391,6 +392,7 @@ pause:addEventListener("touch", stop)
 				audio.play(recipebook_close, {channel=1})
 				--레시피 닫음
 				recipeClose = 1
+				pause.alpha = 1
 				--타임바 보이게
 				if timeBar ~= nil then
 					timeBar.alpha = 1
