@@ -52,7 +52,7 @@ function scene:create( event )
 	avgTimeN.x = avgTimeN.x + 250
 	avgTimeN.y = avgTimeN.y + 400
 	-- 받아오는 평균 소요 시간
-	local avgTime = 3
+	local avgTime = 1
 	-- 학교 건물 사진
 	local schoolImg
 	-- 클리어 소리
@@ -79,57 +79,65 @@ function scene:create( event )
 		gameTip.text = '<    Tip : 이건 김딸기 교수님께서 \n      제일 좋아하시는 레시피잖아? \n      교수님께 만들어드리자!          >'
 		gameTip.size = 60
 		--추후 수정 필요
-		schoolImg = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-		schoolImg.y = schoolImg.y - 200
+		schoolImg = display.newImageRect("img/school/yakhak.jpg", 1200, 900)	-- 약학관
+		schoolImg.x = 720
+		schoolImg.y = 1080
 		sceneGroup:insert(schoolImg)
 	elseif avgTime <= 2.9 then
 		grade.text = 'A'
 		avgTimeN.text = avgTime.. ' 초'
 		--추후 수정 필요
-		schoolImg = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-		schoolImg.y = schoolImg.y - 200
+		schoolImg = display.newImageRect("img/school/inmoon.jpg", 1200, 900)	-- 인문관
+		schoolImg.x = 720
+		schoolImg.y = 1080
 		sceneGroup:insert(schoolImg)
 	elseif avgTime <= 3.9 then
 		grade.text = 'B+'
 		avgTimeN.text = avgTime.. ' 초'
 		--추후 수정 필요
-		schoolImg = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-		schoolImg.y = schoolImg.y - 200
+		schoolImg = display.newImageRect("img/school/yeji.jpg", 1200, 900)		-- 예지관
+		schoolImg.x = 720
+		schoolImg.y = 1080
 		sceneGroup:insert(schoolImg)
 	elseif avgTime <= 4.9 then
 		grade.text = 'B'
 		avgTimeN.text = avgTime.. ' 초'
 		--추후 수정 필요
-		schoolImg = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-		schoolImg.y = schoolImg.y - 200
+		schoolImg = display.newImageRect("img/school/soongin.jpg", 1200, 900)	-- 숭인관
+		schoolImg.x = 720
+		schoolImg.y = 1080
 		sceneGroup:insert(schoolImg)
 	elseif avgTime <= 5.9 then
 		grade.text = 'C+'
 		avgTimeN.text = avgTime.. ' 초'
 		--추후 수정 필요
-		schoolImg = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-		schoolImg.y = schoolImg.y - 200
+		schoolImg = display.newImageRect("img/school/dongin.jpg", 1200, 900)	-- 동인관
+		schoolImg.x = 720
+		schoolImg.y = 1080
 		sceneGroup:insert(schoolImg)
 	elseif avgTime <= 6.9 then
 		grade.text = 'C'
 		avgTimeN.text = avgTime.. ' 초'
 		--추후 수정 필요
-		schoolImg = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-		schoolImg.y = schoolImg.y - 200
+		schoolImg = display.newImageRect("img/school/music.jpg", 1200, 900)		-- 음악관
+		schoolImg.x = 720
+		schoolImg.y = 1080
 		sceneGroup:insert(schoolImg)
 	elseif avgTime <= 7.9 then
 		grade.text = 'D+'
 		avgTimeN.text = avgTime.. ' 초'
 		--추후 수정 필요
-		schoolImg = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-		schoolImg.y = schoolImg.y - 200
+		schoolImg = display.newImageRect("img/school/baekju.jpg", 1200, 900)	-- 백주년
+		schoolImg.x = 720
+		schoolImg.y = 1080
 		sceneGroup:insert(schoolImg)
 	else
 		grade.text = 'D'
 		avgTimeN.text = avgTime.. ' 초'
 		--추후 수정 필요
-		schoolImg = display.newImage("img/clear/out.png", display.contentCenterX, display.contentCenterY)
-		schoolImg.y = schoolImg.y - 200
+		schoolImg = display.newImageRect("img/school/bonguan.jpg", 1200, 900)	-- 본관
+		schoolImg.x = 720
+		schoolImg.y = 1080
 		sceneGroup:insert(schoolImg)
 	end
 
