@@ -157,6 +157,9 @@ function scene:create( event )
 	local specialCustomer = 0
 	--특별한 메뉴 
 	local specialCnt = 0
+	--특별한 손님 특별한 메뉴 제공 성공
+	local specialSuccess2 = 0
+	composer.setVariable("specialSuccess2", specialSuccess2)
 	-- 성공 소요 시간 합산
 	local secondDay = 0
 	------------------------------------
@@ -172,7 +175,7 @@ function scene:create( event )
 	local fail = 0							-- 게임 실패 횟수.
 	local pickMenu = 0
 	local drinkImage = {"americano", "vanilla_latte", "cafe_moca", "strawberry_smoothie", "banana_smoothie", "smoothie_img"}	-- 음료 이미지 주소. 나중에 모든 음료 이미지가 완성되면 수정 및 추가가 필요합니다. (랜덤 함수를 활용하기 위한 변수입니다.)
-	local customerImage = {"customer"}					-- 손님 이미지 주소. 나중에 모든 손님 이미지가 완성되면 수정 및 추가가 필요합니다. (랜덤 함수를 활용하기 위한 변수입니다.)
+	local customerImage = {"customer1", "customer2", "customer3", "customer4"}					-- 손님 이미지 주소. 나중에 모든 손님 이미지가 완성되면 수정 및 추가가 필요합니다. (랜덤 함수를 활용하기 위한 변수입니다.)
 	local timeBar = nil						-- 음료 위에 표시되는 시간 제한 바.
 	local count = 0							-- 시간 제한 카운트 변수.
 	local menu = nil						-- 손님 위에 표시되는 음료 이미지.
@@ -392,20 +395,14 @@ function scene:create( event )
 			sceneGroup:insert(bar)
 		end
 
-		-- 스페셜 메뉴 주문
-		if specialCnt == 1 then
-			pickMenu = 6
-		else
-			pickMenu = math.random(5) 		-- 음료 이미지가 추가되면 수정이 필요합니다. (음료 이미지 개수로 수정해야 함.)
-		end
+
+		pickMenu = math.random(5) 		-- 음료 이미지가 추가되면 수정이 필요합니다. (음료 이미지 개수로 수정해야 함.)
+		
 		print("고른 음료: " .. pickMenu)
 
 		-- 커피류 음료와 스무디류 음료의 이미지 크기가 다르기 때문에 위치를 따로 잡아줬습니다. 
 		if pickMenu == 4 or pickMenu == 5 then					-- 스무디류 음료를 뽑았을 때. 나중에 음료 이미지가 추가되면 수정이 필요합니다.(drinkImage array의 스무디류 인덱스 추가.)
 			menu = display.newImageRect("img/recipe/"..drinkImage[pickMenu]..".png", 100, 209)
-			menu.x, menu.y = 836, 1733
-		elseif pickMenu == 6 then 				--스페셜
-			menu = display.newImageRect("img/main/drink/"..drinkImage[pickMenu]..".png", 100, 209)
 			menu.x, menu.y = 836, 1733
 		else									-- 커피류 음료를 뽑았을 때. 
 			menu = display.newImageRect("img/recipe/"..drinkImage[pickMenu]..".png", 155, 192)
@@ -457,7 +454,7 @@ function scene:create( event )
 			specialCustomer = 1
 			customer[1] = display.newImage(customerGroup, "img/main/character/customer.png")
 		else	
-			pickCustomer = math.random(1)		-- 나중에 손님 이미지가 추가되면 수정이 필요합니다. (손님 이미지 개수로 수정해야 함.)
+			pickCustomer = math.random(4)		-- 나중에 손님 이미지가 추가되면 수정이 필요합니다. (손님 이미지 개수로 수정해야 함.)
 			customer[1] = display.newImage(customerGroup, "img/main/character/"..customerImage[pickCustomer]..".png")
 		end
 		customer[1].x, customer[1].y = 355, 2124
@@ -483,9 +480,9 @@ function scene:create( event )
 				audio.play(coffee_down, {channel=1})
 		 		doorOpen = 1
 
-		 		customer[1] = display.newImage(customerGroup, "img/main/character/customer.png", display.contentCenterX, display.contentCenterY)
+		 		customer[1] = display.newImage(customerGroup, "img/main/character/customer1.png", display.contentCenterX, display.contentCenterY)
 		 		customer[1].x , customer[1].y = 355, 2124
-		 		customer[2] = display.newImage(customerGroup, "img/main/character/customer.png", display.contentCenterX, display.contentCenterY)
+		 		customer[2] = display.newImage(customerGroup, "img/main/character/customer2.png", display.contentCenterX, display.contentCenterY)
 		 		customer[2].x , customer[2].y = 750, 2124
 
 				-- 메뉴를 받기 전 손님 2명을 먼저 받아야 합니다. (손님 이미지 2개 화면에 추가)
@@ -1108,6 +1105,25 @@ function scene:create( event )
  					----------- 알맞은/틀린 음료 건네면 성공/실패 카운트
  					if pickMenu == drinkMade and count ~= 10 then
  						-- 소요 시간 더하기
+ 						secondDay = secondDay + count
+ 						print("소요 시간: " .. secondDay)
+ 						success = success + 1
+ 						--- 20번 성공 시 이동
+						score_s.text = "성공 : " .. success .. " /  10"
+						if (success == 10) then
+							-- 소요 시간 전달
+							print("다음날로 이동")
+							composer.setVariable( "secondDay", secondDay )
+							timeBar:setFillColor(0, 0, 0, 0)
+							timer.cancel(timeAttack) 
+							composer.gotoScene('clear2')
+						end
+					----------- 특별한 손님 특별한 메뉴 성공
+					elseif specialCnt == 1 and drinkMade == 6 and count ~= 10 then
+						--특별한 손님 특별한 메뉴 제공 성공
+						specialSuccess2 = 1
+						composer.setVariable("specialSuccess2", specialSuccess2)
+						-- 소요 시간 더하기
  						secondDay = secondDay + count
  						print("소요 시간: " .. secondDay)
  						success = success + 1
