@@ -93,7 +93,7 @@ function scene:create( event )
 	print("특별한 손님3 성공 확인 유뮤" .. specialSuccess3)
 
 	---- 평균 소요 시간 계산
-	avgTime = (firstDay + secondDay + thirdDay) / 32
+	avgTime = math.floor((firstDay + secondDay + thirdDay) / 32 * 10) / 10
 	print("평균 소요 시간: " .. avgTime)
 
 	--------------------평균 소요 시간에 따른 결과 화면 출력-------------------------------------
