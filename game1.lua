@@ -26,14 +26,14 @@ function scene:create( event )
 	trash.x, trash.y = 470, 924
 	local stopGroup = display.newGroup()
 	-- 일시정지 버튼
-	local pause = display.newImage(stopGroup, "img/main/trash.png", display.contentCenterX, display.contentCenterY)
+	local pause = display.newImage(stopGroup, "img/main/pause.png", display.contentCenterX, display.contentCenterY)
 	pause.x, pause.y = 50, 50
 	pause.alpha = 0
 	-- 시간 멈춤 여부
 	local timestop = 0
 	-- 일시정지 팝업
 	local stop_background 
-	stop_background = display.newImage(stopGroup, "img/recipe_background.png", display.contentCenterX, display.contentCenterY)
+	stop_background = display.newImage(stopGroup, "img/stop_background.png", display.contentCenterX, display.contentCenterY)
 	stop_background.x, stop_background.y = display.contentWidth/2, display.contentHeight/2
 	stop_background.alpha = 0
 	-- 물 버튼

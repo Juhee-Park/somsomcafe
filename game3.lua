@@ -24,6 +24,18 @@ function scene:create( event )
 	-- 쓰레기 통
 	local trash = display.newImage("img/main/trash.png", display.contentCenterX, display.contentCenterY)
 	trash.x, trash.y = 470, 924
+	local stopGroup = display.newGroup()
+	-- 일시정지 버튼
+	local pause = display.newImage(stopGroup, "img/main/pause.png", display.contentCenterX, display.contentCenterY)
+	pause.x, pause.y = 50, 50
+	pause.alpha = 0
+	-- 시간 멈춤 여부
+	local timestop = 0
+	-- 일시정지 팝업
+	local stop_background 
+	stop_background = display.newImage(stopGroup, "img/stop_background.png", display.contentCenterX, display.contentCenterY)
+	stop_background.x, stop_background.y = display.contentWidth/2, display.contentHeight/2
+	stop_background.alpha = 0
 	-- 물 버튼
 	local waterB = display.newImage("img/recipe/water.png", display.contentCenterX, display.contentCenterY)
 	waterB.x = 242
@@ -286,8 +298,54 @@ function scene:create( event )
 	sceneGroup:insert(door)
 	sceneGroup:insert(group)
 	sceneGroup:insert(tableGroup)
+	sceneGroup:insert(stopGroup)
 -----------------------------------------------------------
+--------------------일시정지------------------------------
 
+	local function stop( event )
+		if( event.phase == "began") then 
+			if timestop == 0 then
+				recipeClose = 0
+ 				timer.pause(timeAttack)
+				timestop = 1
+				--타임바 안보이게
+				if timeBar ~= nil then
+					timeBar.alpha = 0
+				end
+				--손님 안 보이게
+				customerGroup.alpha = 0
+				--음료 안 보이게
+				if menu ~= nil then
+					menu.alpha = 0
+					dialog.alpha = 0
+					bar.alpha = 0
+				end
+				pause.alpha = 1
+
+				stop_background.alpha = 1
+				-- 맨 앞에 출력 되게
+				stopGroup:toFront()
+			else
+				recipeClose = 1
+				timer.resume(timeAttack)
+				timestop = 0
+				--타임바 보이게
+				if timeBar ~= nil then
+					timeBar.alpha = 1
+				end
+				--닫을 때 손님 다시 보이게
+				customerGroup.alpha = 1
+				--닫을 때 음료 다시 보이게
+				if menu ~= nil then
+					menu.alpha = 1
+					dialog.alpha = 1
+					bar.alpha = 1
+				end
+				stop_background.alpha = 0
+			end	
+		end
+	 end
+pause:addEventListener("touch", stop)
 ----------------------팝업 닫기-----------------------------
 	-- 팝업 닫기 이벤트
 	local function popupOff( event )  
