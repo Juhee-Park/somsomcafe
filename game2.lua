@@ -306,6 +306,7 @@ function scene:create( event )
 	local function stop( event )
 		if( event.phase == "began") then 
 			if timestop == 0 then
+				audio.play(make_button_click, {channel=1})
 				recipeClose = 0
 				recipe.alpha = 0
  				timer.pause(timeAttack)
@@ -328,6 +329,7 @@ function scene:create( event )
 				-- 맨 앞에 출력 되게
 				stopGroup:toFront()
 			else
+				audio.play(make_button_click, {channel=1})
 				recipeClose = 1
 				timer.resume(timeAttack)
 				timestop = 0
