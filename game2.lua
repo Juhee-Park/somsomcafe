@@ -86,6 +86,7 @@ function scene:create( event )
 	blueberryB.alpha = 0
 	--물
 	local water = display.newImageRect("img/recipe/water.png", 176, 178)
+	water.x = 220
 	water.y = 290
 	water:toBack()
 	--우유
@@ -98,10 +99,12 @@ function scene:create( event )
 	syrup:toBack()
 	--에스프레소
 	local espresso = display.newImageRect("img/recipe/espresso.png", 210, 142)
+	espresso.x = 220
 	espresso.y = 290
 	espresso:toBack()
 	--얼음
 	local ice = display.newImageRect("img/recipe/ice.png", 210, 159)
+	ice.x = 220
 	ice.y = 290
 	ice:toBack()
 	--초코
@@ -418,7 +421,9 @@ continue:addEventListener("touch", keep)
 				audio.play(recipebook_close, {channel=1})
 				--레시피 닫음
 				recipeClose = 1
-				pause.alpha = 1
+				if doorOpen == 1 then
+					pause.alpha = 1
+				end
 				--타임바 보이게
 				if timeBar ~= nil then
 					timeBar.alpha = 1
@@ -1193,6 +1198,9 @@ continue:addEventListener("touch", keep)
 
 	 		display.getCurrentStage():setFocus( event.target )
 	 		event.target.isFocus = true
+ 			-- 드래그 시작할 때
+ 			event.target.initX = event.target.x
+ 			event.target.initY = event.target.y
 	 	elseif (event.phase == "moved" ) then
 	 		if (event.target.isFocus ) then
 	 			event.target.x = event.xStart + event.xDelta
@@ -1204,7 +1212,7 @@ continue:addEventListener("touch", keep)
 	 			--테이블에 놓으면
 	 			if  987 < event.target.x and event.target.x < 1320
  					and 1600 < event.target.y  and event.target.y < 1840 then
-					audio.play(coffee_down, {channel=1})
+					--audio.play(coffee_down, {channel=1})
  					----------- 알맞은/틀린 음료 건네면 성공/실패 카운트
  					if pickMenu == drinkMade and count ~= 10 then
  						-- 소요 시간 더하기
@@ -1290,13 +1298,13 @@ continue:addEventListener("touch", keep)
  						smoothie_sb.alpha = 0
  					end
 	 				-- 원래 자리로 돌아감
-	 				event.target.x = event.xStart
-	 				event.target.y = event.yStart
+	 				event.target.x = event.target.initX
+ 					event.target.y = event.target.initY
 	 			else
 					audio.play(ingred_clink, {channel=1})
 	 				-- 원래 자리로 돌아감
-	 				event.target.x = event.xStart
-	 				event.target.y = event.yStart
+	 				event.target.x = event.target.initX
+ 					event.target.y = event.target.initY
 	 			end
 
 	 		display.getCurrentStage():setFocus(nil)

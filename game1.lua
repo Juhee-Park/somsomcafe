@@ -87,6 +87,7 @@ function scene:create( event )
 	blueberryB.alpha = 0
 	--물
 	local water = display.newImageRect("img/recipe/water.png", 176, 178)
+	water.x = 220
 	water.y = 290
 	water:toBack()
 	--우유
@@ -99,10 +100,12 @@ function scene:create( event )
 	syrup:toBack()
 	--에스프레소
 	local espresso = display.newImageRect("img/recipe/espresso.png", 210, 142)
+	espresso.x = 220
 	espresso.y = 290
 	espresso:toBack()
 	--얼음
 	local ice = display.newImageRect("img/recipe/ice.png", 210, 159)
+	ice.x = 220
 	ice.y = 290
 	ice:toBack()
 	--초코
@@ -244,6 +247,10 @@ function scene:create( event )
 	local popup2 = display.newImage(group, "img/main_popup/popup2.png")
  	popup2.x, popup2.y = 725, 1908
 	popup2.alpha = 0
+	-- 팝업 이미지3 삽입 (게임방법 설명)
+	local popup3 = display.newImage(group, "img/main_popup/popup.png")
+ 	popup3.x, popup3.y = 725, 1908
+	popup3.alpha = 0
 	-- 팝업 버튼 이미지 삽입
 	local popup_button = display.newImage(group, "img/main_popup/popup_button.png")
  	popup_button.x, popup_button.y = 1154, 2149
@@ -391,8 +398,11 @@ continue:addEventListener("touch", keep)
 			if(popup.alpha == 1) then
  				popup.alpha = 0
 				popup2.alpha = 1
+			elseif(popup2.alpha == 1) then
+ 				popup2.alpha = 0
+				popup3.alpha = 1
 			else
-				popup2.alpha = 0
+				popup3.alpha = 0
 				popup_button.alpha = 0
 				--팝업 내려야 문 열림 확인 변수
 				popupClose = 1
@@ -425,7 +435,9 @@ continue:addEventListener("touch", keep)
 				audio.play(recipebook_close, {channel=1})
 				--레시피 닫음
 				recipeClose = 1
-				pause.alpha = 1
+				if doorOpen == 1 then
+					pause.alpha = 1
+				end
 				--타임바 보이게
 				if timeBar ~= nil then
 					timeBar.alpha = 1
@@ -1199,6 +1211,9 @@ continue:addEventListener("touch", keep)
 
 	 		display.getCurrentStage():setFocus( event.target )
 	 		event.target.isFocus = true
+ 			-- 드래그 시작할 때
+ 			event.target.initX = event.target.x
+ 			event.target.initY = event.target.y
 	 	elseif (event.phase == "moved" ) then
 	 		if (event.target.isFocus ) then
 	 			event.target.x = event.xStart + event.xDelta
@@ -1210,7 +1225,7 @@ continue:addEventListener("touch", keep)
 	 			--테이블에 놓으면
 	 			if  987 < event.target.x and event.target.x < 1320
  					and 1600 < event.target.y  and event.target.y < 1840 then
-					audio.play(coffee_down, {channel=1})
+					--audio.play(coffee_down, {channel=1})
  					----------- 알맞은/틀린 음료 건네면 성공/실패 카운트
  					if pickMenu == drinkMade and count ~= 10 then	
  						-- 소요 시간 더하기
@@ -1297,13 +1312,13 @@ continue:addEventListener("touch", keep)
  						smoothie_sb.alpha = 0
  					end
 	 				-- 원래 자리로 돌아감
-	 				event.target.x = event.xStart
-	 				event.target.y = event.yStart
+	 				event.target.x = event.target.initX
+ 					event.target.y = event.target.initY
 	 			else
 					audio.play(ingred_clink, {channel=1})
 	 				-- 원래 자리로 돌아감
-	 				event.target.x = event.xStart
-	 				event.target.y = event.yStart
+	 				event.target.x = event.target.initX
+ 					event.target.y = event.target.initY
 	 			end
 
 	 		display.getCurrentStage():setFocus(nil)
