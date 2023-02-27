@@ -11,11 +11,11 @@ function scene:create( event )
 	local sceneGroup = self.view
 	
     --클리어 화면 출력
-	local background = display.newImage("img/clear_background.png", display.contentCenterX, display.contentCenterY)
- 
+	local background = display.newImage("img/clear_background/background.png", display.contentCenterX, display.contentCenterY)
+ 	-- 클리어 타이틀
+ 	local clearTitle = display.newImage("img/clear_background/clear.png", display.contentCenterX, display.contentCenterY)
     --넘어가기
-	local goNext = display.newImage("img/clear/retry.png", display.contentCenterX, display.contentCenterY)
-	goNext.x = 751
+	local goNext = display.newImage("img/clear_background/next.png", display.contentCenterX, display.contentCenterY)
 	goNext.y = 1723
 	-- 클리어 소리
 	local clear_page = audio.loadSound("sound/clear_page.mp3")
@@ -25,8 +25,8 @@ function scene:create( event )
 	audio.setVolume( 1, { channel=3 } ) 
 
 	sceneGroup:insert(background)
+	sceneGroup:insert(clearTitle)
 	sceneGroup:insert(goNext)
-	--sceneGroup:insert(out)
 
 	
 	local function retry_button(event)

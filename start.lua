@@ -21,7 +21,7 @@ function scene:create( event )
 
 	-- 시작 버튼 이미지 삽입
 	local start_button = display.newImage("img/start/start.png")
- 	start_button.x, start_button.y = 744, 1881
+ 	start_button.x, start_button.y = 724, 2143
 
 	-- 시작 버튼 이벤트
 	local function start_button_event( event )  

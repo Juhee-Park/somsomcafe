@@ -21,41 +21,52 @@ function scene:create( event )
 	local makeButton = display.newImage("img/main/button/make.png", display.contentCenterX, display.contentCenterY)
 	makeButton.x = 1232
 	makeButton.y = 303
+	--픽업대 화살표
+	local arrow = display.newImage("img/main/arrow.png", display.contentCenterX, display.contentCenterY)
+	arrow.x = 1134
+	arrow.y = 1610
 	-- 쓰레기 통
 	local trash = display.newImage("img/main/trash.png", display.contentCenterX, display.contentCenterY)
 	trash.x, trash.y = 470, 924
 	local stopGroup = display.newGroup()
 	-- 일시정지 버튼
 	local pause = display.newImage(stopGroup, "img/main/pause.png", display.contentCenterX, display.contentCenterY)
-	pause.x, pause.y = 50, 50
+	pause.x, pause.y = 115, 75
 	pause.alpha = 0
 	-- 시간 멈춤 여부
 	local timestop = 0
 	-- 일시정지 팝업
 	local stop_background 
-	stop_background = display.newImage(stopGroup, "img/stop_background.png", display.contentCenterX, display.contentCenterY)
+	stop_background = display.newImage(stopGroup, "img/stop_background/background.png", display.contentCenterX, display.contentCenterY)
 	stop_background.x, stop_background.y = display.contentWidth/2, display.contentHeight/2
 	stop_background.alpha = 0
+	-- 일시정지 타이블
+	local pauseTitle = display.newImage(stopGroup, "img/stop_background/pause.png", display.contentCenterX, display.contentCenterY)
+	pauseTitle.alpha = 0
+	-- 재생 버튼
+	local continue = display.newImage(stopGroup, "img/stop_background/continue.png", display.contentCenterX, display.contentCenterY)
+	continue.y = 1723
+	continue.alpha = 0
 	-- 물 버튼
 	local waterB = display.newImage("img/recipe/water.png", display.contentCenterX, display.contentCenterY)
-	waterB.x = 242
-	waterB.y = 732
+	waterB.x = 257
+	waterB.y = 681
 	-- 우유 버튼
 	local milkB = display.newImage("img/recipe/milk.png",display.contentCenterX, display.contentCenterY)
-	milkB.x = 242
-	milkB.y = 944
+	milkB.x = 257
+	milkB.y = 882
 	-- 시럽 버튼
 	local syrupB = display.newImage("img/recipe/syrup.png", display.contentCenterX, display.contentCenterY)
-	syrupB.x = 242
-	syrupB.y = 1157
+	syrupB.x = 257
+	syrupB.y = 1080
 	-- 에스프레소 버튼
 	local espressoB = display.newImage("img/recipe/espresso.png", display.contentCenterX, display.contentCenterY)
 	espressoB.x = 587
-	espressoB.y = 730
+	espressoB.y = 710
 	-- 얼음 버튼
 	local iceB = display.newImage("img/recipe/ice.png",display.contentCenterX, display.contentCenterY)
 	iceB.x = 861
-	iceB.y = 730
+	iceB.y = 710
 	-- 초코 버튼
 	local chocoB = display.newImage("img/recipe/choco.png", display.contentCenterX, display.contentCenterY)
 	chocoB.x = 1200
@@ -213,12 +224,16 @@ function scene:create( event )
 	score_f:setFillColor(0)
 	--score_f.alpha = 0.5
 	--실패 주문 수
-	local order_fail = display.newImage("img/main/fail_count.png", display.contentCenterX, display.contentCenterY)
+	local order_fail = display.newImage("img/main/success_count.png", display.contentCenterX, display.contentCenterY)
 	order_fail.x = order_fail.x + 327
 	order_fail.y = order_fail.y - 763
  	------------------------------------
  	local group = display.newGroup()
 	local tableGroup = display.newGroup()
+	-- 레시피 북 이미지 삽입
+ 	local recipe = display.newImage(group, 'img/main/button/recipe_book.png')
+	recipe.x, recipe.y = 253, 1444
+	recipe.alpha = 1
 	-- 팝업 이미지1 삽입 (배경 설명)
 	local popup = display.newImage(group, "img/main_popup/popup_thirdday.png")
  	popup.x, popup.y = 725, 1908
@@ -232,14 +247,10 @@ function scene:create( event )
  	popup_button.x, popup_button.y = 1154, 2149
 	popup_button.alpha = 1
  	------------------------------------
-	-- 레시피 북 이미지 삽입
- 	local recipe = display.newImage(group, 'img/main/button/recipe_book.png')
-	recipe.x, recipe.y = 253, 1444
-	recipe.alpha = 1
 	-- 레시피 팝업 이미지 삽입 
 	tableGroup.alpha = 0
 	local recipe_popup 
-	recipe_popup = display.newImage(tableGroup, "img/recipe_background.png", display.contentCenterX, display.contentCenterY)
+	recipe_popup = display.newImage(tableGroup, "img/recipe_background3.png", display.contentCenterX, display.contentCenterY)
 	recipe_popup.x, recipe_popup.y = display.contentWidth/2, display.contentHeight/2
 	--레시피 닫기 이미지 삽입
 	local recipe_x
@@ -281,6 +292,7 @@ function scene:create( event )
 	sceneGroup:insert(background)
 	sceneGroup:insert(box)
 	sceneGroup:insert(makeButton)
+	sceneGroup:insert(arrow)
 	sceneGroup:insert(order_success)
 	sceneGroup:insert(order_fail)
 	sceneGroup:insert(waterB)
@@ -307,9 +319,9 @@ function scene:create( event )
 			if timestop == 0 then
 				audio.play(make_button_click, {channel=1})
 				recipeClose = 0
+				recipe.alpha = 0
  				timer.pause(timeAttack)
 				timestop = 1
-				recipe.alpha = 0
 				--타임바 안보이게
 				if timeBar ~= nil then
 					timeBar.alpha = 0
@@ -322,12 +334,23 @@ function scene:create( event )
 					dialog.alpha = 0
 					bar.alpha = 0
 				end
-				pause.alpha = 1
+				pause.alpha = 0
 
 				stop_background.alpha = 1
+				pauseTitle.alpha = 1
+				continue.alpha = 1
 				-- 맨 앞에 출력 되게
 				stopGroup:toFront()
-			else
+			end	
+		end
+	 end
+pause:addEventListener("touch", stop)
+
+--------------------계속하기------------------------------
+
+	local function keep( event )
+		if( event.phase == "began") then 
+			if timestop == 1 then
 				audio.play(make_button_click, {channel=1})
 				recipeClose = 1
 				timer.resume(timeAttack)
@@ -345,11 +368,17 @@ function scene:create( event )
 					dialog.alpha = 1
 					bar.alpha = 1
 				end
+				pause.alpha = 1
+
 				stop_background.alpha = 0
+				pauseTitle.alpha = 0
+				continue.alpha = 0
 			end	
 		end
 	 end
-pause:addEventListener("touch", stop)
+continue:addEventListener("touch", keep)
+
+
 ----------------------팝업 닫기-----------------------------
 	-- 팝업 닫기 이벤트
 	local function popupOff( event )  
@@ -392,6 +421,8 @@ pause:addEventListener("touch", stop)
 				if timeBar ~= nil then
 					timeBar.alpha = 1
 				end
+				-- 문 안 보이게
+				door.alpha = 0
 				--닫을 때 손님 다시 보이게
 				customerGroup.alpha = 1
 				--닫을 때 음료 다시 보이게
@@ -399,6 +430,8 @@ pause:addEventListener("touch", stop)
 					menu.alpha = 1
 				end
 				tableGroup.alpha = 0
+				-- 문 보이게
+				door.alpha = 1
 	 		end  
 		end
 	 
@@ -472,7 +505,7 @@ pause:addEventListener("touch", stop)
 
 		-- 커피류 음료와 스무디류 음료의 이미지 크기가 다르기 때문에 위치를 따로 잡아줬습니다. 
 		if pickMenu == 4 or pickMenu == 5 or pickMenu == 6 then					-- 스무디류 음료를 뽑았을 때. 나중에 음료 이미지가 추가되면 수정이 필요합니다.(drinkImage array의 스무디류 인덱스 추가.)
-			menu = display.newImageRect("img/recipe/"..drinkImage[pickMenu]..".png", 100, 209)
+			menu = display.newImageRect("img/recipe/"..drinkImage[pickMenu]..".png", 100, 199)
 			menu.x, menu.y = 836, 1733
 		else									-- 커피류 음료를 뽑았을 때. 
 			menu = display.newImageRect("img/recipe/"..drinkImage[pickMenu]..".png", 155, 192)

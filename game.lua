@@ -26,8 +26,8 @@ function scene:create( event )
 	trash.x, trash.y = 470, 924
 	-- 물 버튼
 	local waterB = display.newImage("img/recipe/water.png", display.contentCenterX, display.contentCenterY)
-	waterB.x = 242
-	waterB.y = 732
+	waterB.x = 257
+	waterB.y = 681
 	-- 우유 버튼
 	local milkB = display.newImage("img/recipe/milk.png",display.contentCenterX, display.contentCenterY)
 	milkB.x = 242

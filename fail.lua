@@ -15,13 +15,17 @@ function scene:create( event )
 	-- 게임 시작 페이지 (작업자 : 박주희) 
 
 	-- 배경이미지 삽입
-	local background = display.newImageRect("img/fail_background.png", display.contentWidth, display.contentHeight)
+	local background = display.newImageRect("img/fail_background/background.png", display.contentWidth, display.contentHeight)
  	background.x, background.y = display.contentWidth/2, display.contentHeight/2
 
 	-- 재시작 버튼 이미지 삽입
-	local restart_button = display.newImage("img/clear/retry.png")
- 	restart_button.x, restart_button.y = 751, 1723
+	local restart_button = display.newImage("img/fail_background/retry.png")
+ 	restart_button.x, restart_button.y = 397, 2057
  	
+ 	-- 종료하기
+ 	local exit_button = display.newImage("img/fail_background/out.png", display.contentWidth, display.contentHeight)
+ 	exit_button.x, exit_button.y = 1042, 2058
+	
 	-- 실패 소리
 	local fail_page = audio.loadSound("sound/fail_page.mp3")
 	audio.play(fail_page, {channel=3})
@@ -38,13 +42,21 @@ function scene:create( event )
  			composer.gotoScene( "game1" )
  		end  
  	end
-	 
 	-- 팝업 닫기 이벤트 적용
 	restart_button:addEventListener("touch", restart_button_event)
+
+
+	-- 종료 버튼 이벤트
+	 local function out_button(event)
+		native.requestExit()
+ 	end
+ 	exit_button:addEventListener("tap", out_button)
+
 	 --------------------------------------------------------------------------------------------------------------------
 
 	  sceneGroup:insert(background)
 	  sceneGroup:insert(restart_button)
+	  sceneGroup:insert(exit_button)
 
 end
 
