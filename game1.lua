@@ -248,7 +248,7 @@ function scene:create( event )
  	popup2.x, popup2.y = 725, 1908
 	popup2.alpha = 0
 	-- 팝업 이미지3 삽입 (게임방법 설명)
-	local popup3 = display.newImage(group, "img/main_popup/popup.png")
+	local popup3 = display.newImage(group, "img/main_popup/popup3.png")
  	popup3.x, popup3.y = 725, 1908
 	popup3.alpha = 0
 	-- 팝업 버튼 이미지 삽입
