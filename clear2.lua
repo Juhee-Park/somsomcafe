@@ -17,9 +17,6 @@ function scene:create( event )
     --넘어가기
 	local goNext = display.newImage("img/clear_background/next.png", display.contentCenterX, display.contentCenterY)
 	goNext.y = 1723
-	-- 효과음 출처 표기
-	local soundText = display.newText("효과음 출처 : ‘대한민국 대표 BGM 셀바이뮤직’ https://www.sellbuymusic.com", display.contentCenterX, display.contentCenterY)
-	soundText.y = soundText.y + 1200
 	-- 클리어 소리
 	local clear_page = audio.loadSound("sound/clear_page.mp3")
 	audio.play(clear_page, {channel=3})
@@ -29,7 +26,6 @@ function scene:create( event )
 
 	sceneGroup:insert(background)
 	sceneGroup:insert(clearTitle)
-	sceneGroup:insert(soundText)
 	sceneGroup:insert(goNext)
 
 	
