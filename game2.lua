@@ -26,8 +26,8 @@ function scene:create( event )
 	arrow.x = 1134
 	arrow.y = 1610
 	-- 쓰레기 통
-	local trash = display.newImage("img/main/trash.png", display.contentCenterX, display.contentCenterY)
-	trash.x, trash.y = 470, 924
+	local trash = display.newImageRect("img/main/trash.png", 125, 176)
+	trash.x, trash.y = 460, 924
 	local stopGroup = display.newGroup()
 	-- 일시정지 버튼
 	local pause = display.newImage(stopGroup, "img/main/pause.png", display.contentCenterX, display.contentCenterY)

@@ -23,6 +23,31 @@ function scene:create( event )
  	dev_out.x, dev_out.y = 1267, 175
 
 	-- 이름 삽입
+	local creator = display.newText("CREATOR", display.contentWidth/2, display.contentHeight*0.22)
+   creator:setFillColor(0)
+   creator.size = 120
+   local planner = display.newText("기획", display.contentWidth/2, display.contentHeight*0.32)
+   planner:setFillColor(0)
+   planner.size = 120
+   local name = display.newText("박주희", display.contentWidth/2, display.contentHeight*0.37)
+   name:setFillColor(0.4)
+   name.size = 120
+   local develop = display.newText("개발", display.contentWidth/2, display.contentHeight*0.47)
+   develop:setFillColor(0)
+   develop.size = 120
+   local name1 = display.newText("강도경    송예림    이현아", display.contentWidth/2, display.contentHeight*0.52)
+   name1:setFillColor(0.4)
+   name1.size = 120
+   local name2 = display.newText("박주희    임지수    황지민", display.contentWidth/2, display.contentHeight*0.57)
+   name2:setFillColor(0.4)
+   name2.size = 120
+   local disign = display.newText("디자인", display.contentWidth/2, display.contentHeight*0.67)
+   disign:setFillColor(0)
+   disign.size = 120
+   local name3 = display.newText("김지윤", display.contentWidth/2, display.contentHeight*0.72)
+   name3:setFillColor(0.4)
+   name3.size = 120
+
 
 	-- 시작 버튼 이벤트
 	local function dev_out_button_event( event )  
@@ -35,6 +60,14 @@ function scene:create( event )
 	 --------------------------------------------------------------------------------------------------------------------
 
 	  sceneGroup:insert(background)
+	  sceneGroup:insert(creator)
+	  sceneGroup:insert(planner)
+	  sceneGroup:insert(name)
+	  sceneGroup:insert(develop)
+	  sceneGroup:insert(name1)
+	  sceneGroup:insert(name2)
+	  sceneGroup:insert(disign)
+	  sceneGroup:insert(name3)
 	  sceneGroup:insert(dev_out)
 
 end
