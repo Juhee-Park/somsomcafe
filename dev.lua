@@ -12,44 +12,30 @@ function scene:create( event )
 	
 	
 	--------------------------------------------------------------------------------------------------------------------
-	-- 게임 시작 페이지 (작업자 : 박주희) 
 
 
 	-- 배경이미지 삽입
-	local background = display.newImageRect("img/start_background.png", display.contentWidth, display.contentHeight)
+	local background = display.newImageRect("img/end_background/background.png", display.contentWidth, display.contentHeight)
  	background.x, background.y = display.contentWidth/2, display.contentHeight/2
 
-	-- 시작 버튼 이미지 삽입
-	local start_button = display.newImage("img/start/start.png")
- 	start_button.x, start_button.y = 724, 2143
+	-- 나가기이미지 삽입
+	local dev_out = display.newImage("img/recipe/recipe_out.png")
+ 	dev_out.x, dev_out.y = 1267, 175
 
-	-- 개발자 버튼 이미지 삽입
-	local dev_button = display.newImage("img/dev_button.png")
- 	dev_button.x, dev_button.y = 1267, 175
+	-- 이름 삽입
 
 	-- 시작 버튼 이벤트
-	local function start_button_event( event )  
+	local function dev_out_button_event( event )  
  		if( event.phase == "began" ) then  
- 			composer.gotoScene( "game1" )
+ 			composer.gotoScene( "start" )
  		end  
  	end
-
-	 -- 개발자 버튼 이벤트
-	local function dev_button_event( event )  
- 		if( event.phase == "began" ) then  
- 			composer.gotoScene( "dev" )
- 		end  
- 	end
+	dev_out:addEventListener("touch", dev_out_button_event)
 	 
-	-- 팝업 닫기 이벤트 적용
-	start_button:addEventListener("touch", start_button_event)
-	-- 개발자 닫기 이벤트 적용
-	dev_button:addEventListener("touch", dev_button_event)
 	 --------------------------------------------------------------------------------------------------------------------
 
 	  sceneGroup:insert(background)
-	  sceneGroup:insert(start_button)
-	  sceneGroup:insert(dev_button)
+	  sceneGroup:insert(dev_out)
 
 end
 
@@ -76,7 +62,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
-		composer.removeScene('start')
+		composer.removeScene('dev')
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
 	end
